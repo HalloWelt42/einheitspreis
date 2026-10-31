@@ -70,6 +70,14 @@
   const FOR_CONTEXT_RE = /(?<!\p{L})[Ff]ür(?:\s*(?:\d[\d.,]*\s*\p{L}{0,6}\.?|\p{Lu}{2,3}(?:\/\p{Lu}{2,3})*(?!\p{L})|und|oder|&|\/|,|-))*\s*$/u;
   const FOR_CONTEXT_DIMENSIONS = new Set(['mass', 'volume']);
 
+  // Kurzform "512G", "2T" nur bei typischen Speichergrößen und wenn der Titel Speicher nennt:
+  // "5G", "4G LTE", "2.4G" sind Funkstandards.
+  const SHORT_STORAGE_RES = [
+    { re: /(?<![\d.,])(16|32|64|128|256|512|1024|2048)\s?G(?![\p{L}\d])/gu, factor: 1e-3 },
+    { re: /(?<![\d.,])(1|2|4|8|16)\s?T(?![\p{L}\d])/gu, factor: 1 }
+  ];
+  const STORAGE_CONTEXT_RE = /SSD|HDD|NVMe|M\.2|Festplatte|Speicher|micro\s?SD|SD[\s-]?Karte|USB[\s-]?Stick|Flash/i;
+
   // Arbeitsspeicher eines Geräts ist kein Speicherplatz ("8GB DDR4", "16 GB RAM", "RAM: 8 GB").
   const MEMORY_AFTER_RE = /^\s*(?:(?:LP)?DDR\d|S?D?RAM\b|Arbeitsspeicher|Hauptspeicher)/i;
   const MEMORY_BEFORE_RE = /(?:\bRAM|Arbeitsspeicher|Hauptspeicher)\s*:?\s*$/i;
@@ -173,6 +181,27 @@
         start: match.index,
         end: match.index + match[0].length
       });
+    }
+    return found.concat(findShortStorage(text));
+  }
+
+  function findShortStorage(text) {
+    if (!STORAGE_CONTEXT_RE.test(text)) return [];
+    const found = [];
+    for (const { re, factor } of SHORT_STORAGE_RES) {
+      for (const match of text.matchAll(re)) {
+        const prefix = text.slice(Math.max(0, match.index - 24), match.index);
+        if (LIMIT_CONTEXT_RE.test(prefix) || isMemory(prefix, text.slice(match.index + match[0].length))) continue;
+        const multiplierMatch = prefix.match(MULTIPLIER_BEFORE_RE);
+        found.push({
+          dimension: 'storage',
+          amount: Number(match[1]) * factor,
+          multiplier: multiplierOf(multiplierMatch && multiplierMatch[1]),
+          text: match[0],
+          start: match.index,
+          end: match.index + match[0].length
+        });
+      }
     }
     return found;
   }

@@ -1545,7 +1545,13 @@
  },
  {
   "titel": "SIX X4000 512G M.2 SSD PCIe Gen3x4 NVME SSD Interne Solid-State-Laufwerk - bis zu 3.000MB/s Lesen, 1.300MB/s Schreiben",
-  "ergebnis": null
+  "ergebnis": {
+   "dimension": "storage",
+   "quelle": "computed",
+   "einheitspreis": 175.762,
+   "einheit": "TB",
+   "menge": "512G"
+  }
  },
  {
   "titel": "10 Stück USB Stick 16GB 2.0,WOOOLKEN Schwarzer Speicherstick",

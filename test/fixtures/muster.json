@@ -395,6 +395,49 @@
         "menge": 6.356
       },
       "quelle": "HELF-103"
+    },
+    {
+      "titel": "SIX X4000 512G M.2 SSD PCIe Gen3x4 NVME SSD Interne Solid-State-Laufwerk - bis zu 3.000MB/s Lesen, 1.300MB/s Schreiben",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 0.512
+      },
+      "quelle": "HELF-105",
+      "hinweis": "Kurzform 512G mit Speicherbezug"
+    },
+    {
+      "titel": "Fanxiang 2T NVMe SSD",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 2
+      },
+      "quelle": "HELF-105",
+      "hinweis": "Kurzform 2T mit Speicherbezug"
+    },
+    {
+      "titel": "4G LTE Router mit SIM-Kartenslot",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-105",
+      "hinweis": "4G ist Funkstandard, kein Speicher"
+    },
+    {
+      "titel": "2.4G Wireless Maus mit USB-Empfänger",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-105",
+      "hinweis": "2.4G ist Funkfrequenz"
+    },
+    {
+      "titel": "Samsung 2TB SSD mit 512G Cache",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 2
+      },
+      "quelle": "HELF-105",
+      "hinweis": "Kapazität schlägt Kurzform-Cache"
     }
   ],
   "preise": [
@@ -558,6 +601,15 @@
       },
       "quelle": "HELF-103",
       "hinweis": "Widerspruch Shop gegen Text um Faktor 4"
+    },
+    {
+      "titel": "Crucial P510 SSD 1TB M.2 NVMe PCIe 5.0 x4 Gen5, bis zu 11.000 MB/s Lesen, 9.500 MB/s Schreiben, Interne Festplatte - CT1000P510SSD8-01",
+      "preis": null,
+      "erwartet": {
+        "auslassen": true
+      },
+      "quelle": "HELF-105",
+      "hinweis": "Karte ohne Preis ('Optionen anzeigen'): kein Einheitspreis"
     }
   ],
   "ausreisser": [
