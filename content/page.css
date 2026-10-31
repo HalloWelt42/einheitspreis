@@ -22,9 +22,9 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 1px;
-  margin: 6px 0 2px;
-  padding: 4px 9px 5px;
-  border-left: 4px solid var(--ep-accent);
+  margin: 4px 0 2px;
+  padding: 3px 7px 4px;
+  border-left: 3px solid var(--ep-accent);
   border-radius: 6px;
   background: var(--ep-bg);
   color: var(--ep-fg);
@@ -35,13 +35,13 @@
 }
 
 .ep-badge-price {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 700;
   white-space: nowrap;
 }
 
 .ep-badge-detail {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   opacity: 0.85;
   overflow-wrap: anywhere;
@@ -57,18 +57,18 @@
 .text-swatch-container > .ep-badge,
 .a-button-inner > .ep-badge {
   display: flex;
-  margin: 4px 6px 6px;
-  padding: 3px 6px;
+  margin: 3px 5px 5px;
+  padding: 2px 5px;
 }
 
 .text-swatch-container > .ep-badge .ep-badge-price,
 .a-button-inner > .ep-badge .ep-badge-price {
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .text-swatch-container > .ep-badge .ep-badge-detail,
 .a-button-inner > .ep-badge .ep-badge-detail {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 /* Kurz aufleuchten, wenn die Vergleichsliste zu einem Treffer springt. */
