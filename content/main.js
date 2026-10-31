@@ -13,6 +13,18 @@
   const OWN_ELEMENTS = '.ep-badge, #einheitspreis-panel-host';
 
   let timer = null;
+  let observer = null;
+
+  // Nach dem Neuladen oder Entfernen der Erweiterung läuft dieses Skript im offenen Tab weiter,
+  // erreicht den Browser aber nicht mehr ("Extension context invalidated"): dann still aufhören.
+  function extensionAlive() {
+    return Boolean(root.chrome && chrome.runtime && chrome.runtime.id);
+  }
+
+  function stop() {
+    clearTimeout(timer);
+    if (observer) observer.disconnect();
+  }
 
   function computeEntries(offers, settings) {
     const entries = [];
@@ -38,6 +50,7 @@
   }
 
   function scan() {
+    if (!extensionAlive()) return stop();
     const settings = ns.settings.get();
     const entries = computeEntries(ns.amazonDom.readOffers(), settings);
     const { compared, duplicates } = splitDuplicates(entries);
@@ -65,10 +78,12 @@
     await ns.settings.load();
     ns.settings.onChange(scan);
     scan();
-    new MutationObserver((mutations) => {
+    observer = new MutationObserver((mutations) => {
+      if (!extensionAlive()) return stop();
       if (mutations.every(isOwnMutation)) return;
       schedule();
-    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+    });
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
   }
 
   start().catch((e) => console.warn('[Einheitspreis] Start fehlgeschlagen:', e.message));

@@ -15,6 +15,7 @@
       }
     },
     runtime: {
+      id: 'pruefstand',
       getURL: (path) => '/' + path,
       getManifest: () => window.__EP_MANIFEST__
     },
