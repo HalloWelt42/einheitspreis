@@ -438,6 +438,24 @@
       },
       "quelle": "HELF-105",
       "hinweis": "Kapazität schlägt Kurzform-Cache"
+    },
+    {
+      "titel": "SANDISK Optimus GX PRO 850X NVMe SSD 1 TB (bis zu 7.300/6.300 MB/s sequentielles Lesen/Schreiben, M.2 2280)",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 1
+      },
+      "quelle": "HELF-106",
+      "hinweis": "850X ist Modellnummer, keine Stückzahl (zeigte 850 x 1 TB, Platz 1)"
+    },
+    {
+      "titel": "Lexar Professional 1667x SD Karte 64GB SDXC UHS-II",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 0.064
+      },
+      "quelle": "HELF-106",
+      "hinweis": "1667x ist Geschwindigkeitsklasse"
     }
   ],
   "preise": [

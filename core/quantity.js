@@ -97,9 +97,10 @@
     /\b(\d{1,3})[\s-]*(?:Pack|Pck\.?)\b/i,
     /\bPack\s+of\s+(\d{1,3})\b/i,
     /\b(\d{1,3})\s+(?:Flaschen|Dosen|Packungen|Kanister|Beuteln?|Portionsbeuteln?|Gläser|Karten)\b/i,
-    // "100 x Wattestäbchen", "28 x MaXimum", aber nicht Anschlüsse wie "2 × M.2" oder "4 x HDMI":
-    // ein Wort aus mindestens drei Buchstaben mit einem Kleinbuchstaben.
-    /(?:^|[\s(,])(\d{1,3})\s*[x×X]\s+(?=\p{L}{3})\p{L}*\p{Ll}/u,
+    // "100 x Wattestäbchen", "28 x MaXimum", "3X Universalgas", aber nicht Anschlüsse wie "2 × M.2" oder "4 x HDMI"
+    // (ein Wort aus mindestens drei Buchstaben mit einem Kleinbuchstaben) und nicht Modellnummern wie
+    // "Optimus GX PRO 850X NVMe" (höchstens 100).
+    /(?:^|[\s(,])(100|[1-9]\d?)\s*[x×X]\s+(?=\p{L}{3})\p{L}*\p{Ll}/u,
     // Stückzahl in Klammern am Ende des Titels: "... Notfälle (28)", "... & mehr (28 x)"
     /\((\d{1,3})\s*[x×]?\)\s*$/,
     // "28 Premium Gaskartuschen", "6 Zylinder": Behälter im Plural, davor höchstens ein Wort;
