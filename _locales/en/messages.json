@@ -3,7 +3,7 @@
     "message": "Einheitspreis"
   },
   "appDescription": {
-    "message": "Shows the price per TB, GB, litre, kilogram, wash load or piece on Amazon and ranks offers by it."
+    "message": "Shows the price per TB, GB, litre, kilogram, wash load or piece in the online shop and ranks offers by it."
   },
   "panelTitle": {
     "message": "Unit prices compared"
@@ -30,9 +30,6 @@
         "content": "$2"
       }
     }
-  },
-  "sourceAmazon": {
-    "message": "Unit price by Amazon"
   },
   "unitTB": {
     "message": "TB"
@@ -83,5 +80,8 @@
         "content": "$2"
       }
     }
+  },
+  "sourceShop": {
+    "message": "Unit price by the shop"
   }
 }

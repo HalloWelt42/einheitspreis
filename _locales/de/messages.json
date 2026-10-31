@@ -3,7 +3,7 @@
     "message": "Einheitspreis"
   },
   "appDescription": {
-    "message": "Zeigt auf Amazon den Preis pro TB, GB, Liter, Kilogramm, Waschladung oder Stück und sortiert Angebote danach."
+    "message": "Zeigt im Online-Shop den Preis pro TB, GB, Liter, Kilogramm, Waschladung oder Stück und sortiert Angebote danach."
   },
   "panelTitle": {
     "message": "Einheitspreise im Vergleich"
@@ -30,9 +30,6 @@
         "content": "$2"
       }
     }
-  },
-  "sourceAmazon": {
-    "message": "Grundpreis lt. Amazon"
   },
   "unitTB": {
     "message": "TB"
@@ -83,5 +80,8 @@
         "content": "$2"
       }
     }
+  },
+  "sourceShop": {
+    "message": "Grundpreis des Shops"
   }
 }

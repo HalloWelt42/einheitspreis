@@ -1,0 +1,60 @@
+/* Neutrale Shopseite für Vorführbilder: eigene Gestaltung, keine fremden Marken. */
+:root {
+  --kz-kopf: #1f2933;
+  --kz-kopf2: #2f3d4a;
+  --kz-akzent: #f2a93b;
+  --kz-text: #1d232a;
+  --kz-leise: #5d6874;
+  --kz-linie: #d7dde3;
+  --kz-link: #1e6fa8;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: var(--kz-text); font: 15px/1.45 "Helvetica Neue", Arial, sans-serif; }
+.kz-kopf { display: flex; align-items: center; gap: 22px; padding: 10px 22px; background: var(--kz-kopf); color: #fff; }
+.kz-marke { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+.kz-marke span { color: var(--kz-akzent); }
+.kz-suche { flex: 1; display: flex; max-width: 760px; }
+.kz-suche input { flex: 1; padding: 9px 12px; border: 0; border-radius: 6px 0 0 6px; font: inherit; }
+.kz-suche button { width: 46px; border: 0; border-radius: 0 6px 6px 0; background: var(--kz-akzent); }
+.kz-konto { font-size: 13px; line-height: 1.25; }
+.kz-konto b { font-size: 14px; }
+.kz-leiste { display: flex; gap: 18px; padding: 7px 22px; background: var(--kz-kopf2); color: #fff; font-size: 14px; }
+.kz-seite { max-width: 1240px; margin: 0 auto; padding: 18px 22px 40px; }
+.kz-pfad { color: var(--kz-leise); font-size: 13px; margin-bottom: 14px; }
+.kz-produkt { display: grid; grid-template-columns: 380px minmax(0, 1fr) 250px; gap: 32px; }
+.kz-bild { display: flex; align-items: center; justify-content: center; min-height: 420px; }
+h1#productTitle { margin: 0 0 6px; font-size: 24px; font-weight: 500; line-height: 1.3; }
+.kz-sterne { color: var(--kz-leise); font-size: 13px; margin-bottom: 12px; }
+.kz-sterne b { color: var(--kz-akzent); letter-spacing: 1px; }
+.kz-trenner { border: 0; border-top: 1px solid var(--kz-linie); margin: 10px 0 14px; }
+.kz-preis { font-size: 30px; font-weight: 500; }
+.kz-preis sup { font-size: 14px; }
+.kz-klein { color: var(--kz-leise); font-size: 13px; margin: 10px 0 16px; }
+.kz-wahl-titel { font-size: 14px; margin-bottom: 8px; }
+.kz-kacheln { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.kz-kacheln li { width: 108px; border: 1px solid #aab4be; border-radius: 8px; overflow: hidden; }
+.kz-kacheln li.kz-gewaehlt { border: 2px solid #1e5f8f; }
+.kz-kacheln li.kz-gewaehlt .swatch-title-text-container { background: #e6f2fb; }
+.swatch-title-text-container { padding: 6px 8px 4px; font-weight: 700; border-bottom: 1px solid var(--kz-linie); }
+.kz-kachelpreis { padding: 4px 8px 0; font-size: 13px; }
+.kz-kaufbox { border: 1px solid var(--kz-linie); border-radius: 8px; padding: 16px; align-self: start; }
+.kz-kaufbox .kz-preis { font-size: 24px; }
+.kz-knopf { display: block; margin-top: 10px; padding: 8px; border-radius: 20px; background: var(--kz-akzent); text-align: center; font-size: 14px; }
+.kz-knopf.kz-zwei { background: #f5c46e; }
+.kz-gruen { color: #1c7c3a; font-size: 17px; margin-top: 10px; }
+.kz-merkmale { margin-top: 16px; font-size: 14px; }
+.kz-merkmale td { padding: 3px 18px 3px 0; vertical-align: top; }
+.kz-merkmale td:first-child { font-weight: 700; }
+/* Suche */
+.kz-treffer-kopf { font-size: 14px; padding: 8px 22px; border-bottom: 1px solid var(--kz-linie); }
+.kz-suchseite { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 26px; max-width: 1240px; margin: 0 auto; padding: 16px 22px 40px; }
+.kz-filter { font-size: 14px; color: var(--kz-text); }
+.kz-filter h3 { margin: 14px 0 6px; font-size: 14px; }
+.kz-filter div { margin: 3px 0; }
+.kz-ergebnisse h2.kz-ueber { margin: 0 0 10px; font-size: 20px; }
+.kz-treffer { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 20px; padding: 14px 0; border-bottom: 1px solid var(--kz-linie); }
+.kz-treffer-bild { display: flex; align-items: center; justify-content: center; background: #f6f7f8; border-radius: 6px; height: 170px; }
+.kz-treffer h2 { margin: 0 0 4px; font-size: 18px; font-weight: 500; line-height: 1.3; }
+.kz-treffer .kz-preis { font-size: 24px; }
+.kz-lieferung { font-size: 13px; color: var(--kz-leise); margin-top: 4px; }
+.a-offscreen, .apex-pricetopay-accessibility-label { position: absolute; left: -9999px; }

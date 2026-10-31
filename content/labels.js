@@ -46,7 +46,7 @@
   // Was erkannt wurde, damit jede Zahl nachprüfbar ist: "5 x 32 GB".
   function quantityText(unitPrice) {
     const quantity = unitPrice.quantity;
-    if (!quantity) return t('sourceAmazon');
+    if (!quantity) return t('sourceShop');
     const single = quantity.text.replace(/\s+/g, ' ');
     return quantity.items > 1 ? quantity.items + ' x ' + single : single;
   }

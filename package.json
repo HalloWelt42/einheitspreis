@@ -1,7 +1,7 @@
 {
   "name": "einheitspreis",
   "private": true,
-  "description": "Einheitspreise (€/TB, €/l, €/kg, €/Waschladung) auf Amazon vergleichen",
+  "description": "Einheitspreise (€/TB, €/l, €/kg, €/Waschladung) im Online-Shop vergleichen",
   "scripts": {
     "vendor": "node scripts/vendor.mjs",
     "test": "node --test test/*.test.js",
