@@ -49,9 +49,9 @@
   // Davor keine Ziffer und kein Buchstabe, außer dem "x" eines Faktors ("12x0,5l").
   const QUANTITY_START = '(?<!\\d|\\d[.,])(?:(?<=\\d\\s?[x×])|(?<!\\p{L}))';
 
-  // Menge: Zahl, Einheit, danach kein Buchstabe und keine Rate.
+  // Menge: Zahl, Einheit (auch "256-GB-Karte"), danach kein Buchstabe und keine Rate.
   const QUANTITY_RE = new RegExp(
-    QUANTITY_START + NUMBER + '\\s?(' + UNIT_ALTERNATION + ')(?![\\p{L}\\d])(?!' + RATE_SUFFIX + ')',
+    QUANTITY_START + NUMBER + '(?:\\s|-)?(' + UNIT_ALTERNATION + ')(?![\\p{L}\\d])(?!' + RATE_SUFFIX + ')',
     'giu'
   );
 
@@ -61,6 +61,10 @@
   // Mengen nach diesen Wörtern sind Grenzwerte, keine Inhalte ("bis zu 24 TB").
   const LIMIT_CONTEXT_RE = /(?:bis(?:\s+zu)?|max\.?|maximal|unterstützt|kompatibel(?:\s+mit)?|up\s+to|supports?)\s*$/i;
 
+  // Arbeitsspeicher eines Geräts ist kein Speicherplatz ("8GB DDR4", "16 GB RAM", "RAM: 8 GB").
+  const MEMORY_AFTER_RE = /^\s*(?:(?:LP)?DDR\d|S?D?RAM\b|Arbeitsspeicher|Hauptspeicher)/i;
+  const MEMORY_BEFORE_RE = /(?:\bRAM|Arbeitsspeicher|Hauptspeicher)\s*:?\s*$/i;
+
   // Packungsgröße irgendwo im Text.
   const PACK_RES = [
     /\b(\d{1,3})\s*er[\s-]*(?:Pack|Set|Packung|Vorteilspack)/i,
@@ -68,7 +72,8 @@
     /\b(\d{1,3})[\s-]*(?:Pack|Pck\.?)\b/i,
     /\bPack\s+of\s+(\d{1,3})\b/i,
     /\b(\d{1,3})\s+(?:Flaschen|Dosen|Packungen|Kanister|Beuteln?|Portionsbeuteln?|Gläser|Karten)\b/i,
-    /(?:^|[\s(,])(\d{1,3})\s*[x×]\s+\p{L}/iu,
+    // "100 x Wattestäbchen", aber nicht Anschlüsse wie "2 × M.2" oder "4 x HDMI": ein Wort mit Kleinbuchstaben.
+    /(?:^|[\s(,])(\d{1,3})\s*[x×]\s+\p{Lu}?\p{Ll}{2,}/u,
     /\b(\d{1,3})er(?![\s-]*Jahre)\b/i
   ];
 
@@ -112,6 +117,10 @@
     return 1;
   }
 
+  function isMemory(prefix, rest) {
+    return MEMORY_BEFORE_RE.test(prefix) || MEMORY_AFTER_RE.test(rest.slice(0, 24));
+  }
+
   /** Alle Mengenangaben im Text, je mit Gesamtmenge (Faktor "2 x" eingerechnet). */
   function findQuantities(text) {
     const found = [];
@@ -120,6 +129,7 @@
       if (!unit) continue;
       const prefix = text.slice(Math.max(0, match.index - 24), match.index);
       if (LIMIT_CONTEXT_RE.test(prefix)) continue;
+      if (unit.dimension === 'storage' && isMemory(prefix, text.slice(match.index + match[0].length))) continue;
       const value = parseNumber(match[1], COUNTED_DIMENSIONS.has(unit.dimension) ? 0 : unit.factor);
       if (!Number.isFinite(value) || value <= 0) continue;
       const multiplierMatch = prefix.match(MULTIPLIER_BEFORE_RE);

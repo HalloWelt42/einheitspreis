@@ -36,7 +36,13 @@ const QUANTITY_CASES = [
   ['Somat Classic Power kompakte Spülmaschinentabs (172 Tabs)', 'portion', 172],
   ['POWREOWL AA Alkaline-Batterien (LR6), Ultra Power, 60 Stück', 'count', 60],
   ['Varta 100 x Varta 04006 Batterien Alkaline, Mignon, AA', 'count', 100],
-  ['Router mit 5G Modem', null, null]
+  ['Router mit 5G Modem', null, null],
+  // Arbeitsspeicher und Anschlüsse sind keine Kapazität (HELF-101)
+  ['UGREEN NASync DXP4800 GT 4 Bay NAS (ohne HDD) | AMD Ryzen R2514, Dual 10GbE, 8GB DDR4 bis 64GB, 4K HDMI, 2 × M.2 NVMe-Steckplätze', null, null],
+  ['Mini-PC mit 16 GB RAM und 512 GB SSD', 'storage', 0.512],
+  ['Notebook, RAM: 8 GB, 1 TB SSD', 'storage', 1],
+  ['Wattestäbchen 100 x Wattestäbchen Bambus', 'count', 100],
+  ['Amazon Basics 256-GB-microSDXC-Karte mit Adapter', 'storage', 0.256]
 ];
 
 for (const [title, dimension, amount] of QUANTITY_CASES) {

@@ -8,7 +8,7 @@ Browser-Erweiterung für den Online-Shop: zeigt an jedem Angebot den Preis pro E
 - **Waschmittel**: Preis pro Waschladung
 - **Tabs, Kapseln, Pods**: Preis pro Stück
 - **Lebensmittel und Flüssiges**: Preis pro Liter oder Kilogramm, bevorzugt der Grundpreis, den der Shop selbst angibt
-- **Empfehlungslisten**: auch auf Seiten wie "Weiter einkaufen" mit Empfehlungskacheln
+- **Karussells und Empfehlungen**: jede Angebotskarte der Seite, etwa Werbeleisten, "Kunden ... haben auch angesehen", "Wird oft zusammen gekauft" oder "Weiter einkaufen"; derselbe Artikel zählt nur einmal
 - **Vergleichsliste**: schwebender Knopf unten rechts, günstigster Einheitspreis zuerst, Klick springt zum Angebot
 
 Jedes Abzeichen nennt die erkannte Menge (etwa "5 x 32 GB"), damit jede Zahl nachprüfbar ist. Farben: grün = günstigster, hellgrün bis 15 % teurer, gelb bis 40 %, rot darüber, blau = einziges Angebot dieser Einheit.
@@ -37,7 +37,7 @@ Der Rechenkern (`core/`) ist frei von Browser-Schnittstellen und liest die Menge
 | Grundpreis des Shops ("12,60 €/l"), außer er lautet nur "€/Stück" | 2 |
 | Liter, Kilogramm, Stück aus dem Text | 3 |
 
-Berücksichtigt werden Faktoren ("6 x 1,5 l", "12x0,5l", "6 x 12 x 85g"), Packungen ("3er Pack", "2 Packungen mit 1 kg" ohne Doppelzählung), deutsche und englische Zahlen ("1.000 g", "1,5 l", "1.595 lt."). Verworfen werden Raten und Grenzwerte ("180 TB/Jahr", "7.400 MB/s", "bis zu 24 TB"); "256 MB Cache" verliert gegen die Kapazität.
+Berücksichtigt werden Faktoren ("6 x 1,5 l", "12x0,5l", "6 x 12 x 85g"), Packungen ("3er Pack", "2 Packungen mit 1 kg" ohne Doppelzählung), deutsche und englische Zahlen ("1.000 g", "1,5 l", "1.595 lt."). Verworfen werden Raten, Grenzwerte und Arbeitsspeicher ("180 TB/Jahr", "7.400 MB/s", "bis zu 24 TB", "8GB DDR4"); "256 MB Cache" verliert gegen die Kapazität.
 
 Geprüft ist die Erkennung an 910 echten Suchtreffern aus Speicher, Lebensmitteln, Waschmittel, Batterien und Tierfutter (`test/fixtures`).
 

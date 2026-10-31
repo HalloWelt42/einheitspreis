@@ -10,14 +10,18 @@
   const { parseMoney } = ns.money;
 
   const SEARCH_RESULT = '[data-component-type="s-search-result"][data-asin]:not([data-asin=""])';
-  // Empfehlungskacheln (etwa "Weiter einkaufen", Bestseller) und die Karte des zuletzt angesehenen Artikels.
-  // Amazons Klassennamen sind dort verschlüsselt, lesbar bleibt nur ihr Mittelteil, daher [class*=...].
-  const RECOMMENDATION_CARDS = [
-    '.p13n-intuition-product-faceout__top-container[data-asin]:not([data-asin=""])',
-    '[class*="singleProductDetails"]'
-  ].join(', ');
-  const CARD_TITLE = '[class*="_title"]';
-  const ASIN_IN_URL = /\/dp\/([A-Z0-9]{10})/;
+  // Alle übrigen Angebote (Karussells, Werbeleisten, Empfehlungen) haben keinen gemeinsamen Aufbau; erkannt werden sie
+  // über ihren Preis und den kleinsten umschließenden Bereich mit genau einem Artikel. Amazons Klassennamen sind dort
+  // teils verschlüsselt, lesbar bleibt nur ihr Mittelteil, daher [class*=...].
+  const CARD_PRICE = '.a-price:not(.a-text-price), .p13n-sc-price';
+  const CARD_TITLES = ['h2', '.a-truncate-full', '[class*="_title"]', '[class*="truncate"]:not(.a-truncate-cut)'];
+  const CARD_MAX_DEPTH = 15;
+  const CARD_MIN_TITLE = 12;
+  const ASIN_IN_URL = /\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?![A-Z0-9])/;
+  const ASIN_IN_ITEM_ID = /^amzn1\.asin\.(?:\d+\.)?([A-Z0-9]{10})$/;
+  const ASIN_SOURCES = '[data-asin]:not([data-asin=""]), [data-csa-c-item-id^="amzn1.asin."], a[href]';
+  // Bereiche, die eigene Leser haben: Suchtreffer, Kopf der Produktseite mit Varianten.
+  const OWN_READER_AREAS = SEARCH_RESULT + ', #ppd, #twister_feature_div, .ep-badge, #einheitspreis-panel-host';
   const STRIKE = '.a-text-strike, [data-a-strike="true"], s, del';
 
   // Preisbereich des Hauptangebots, in dieser Reihenfolge: Mitte der Seite vor Kaufbox.
@@ -47,7 +51,8 @@
       const money = parseMoney(offscreen && offscreen.textContent) || parseMoney(priceEl.textContent);
       if (money) return money;
     }
-    return null;
+    const plain = scope.querySelector('.p13n-sc-price');
+    return plain ? parseMoney(plain.textContent) : null;
   }
 
   // Amazons Grundpreis, etwa "(12,60 € / l)": ein Textpreis, dem "/Einheit)" folgt.
@@ -96,36 +101,96 @@
     return offers;
   }
 
-  function readCardTitle(card) {
-    const parts = Array.from(card.querySelectorAll(CARD_TITLE)).map((el) => el.textContent.trim()).filter(Boolean);
-    const image = card.querySelector('img[alt]');
-    const title = parts.length ? parts.join(' ') : (image ? image.getAttribute('alt') : '');
-    return title.replace(/\s+/g, ' ').trim();
+  function asinOfLink(link) {
+    let href = link.getAttribute('href') || '';
+    try {
+      href = decodeURIComponent(href);
+    } catch (e) {
+      // unvollständig kodiert: so lesen, wie es dasteht
+    }
+    const match = href.match(ASIN_IN_URL);
+    return match ? match[1] : null;
   }
 
-  function readRecommendationCards() {
+  function asinOf(element) {
+    if (element.tagName === 'A') return asinOfLink(element);
+    if (element.dataset.asin) return element.dataset.asin;
+    const itemId = (element.dataset.csaCItemId || '').match(ASIN_IN_ITEM_ID);
+    return itemId ? itemId[1] : null;
+  }
+
+  // Alle Artikel eines Bereichs: data-asin, Kennung der Amazon-Messung, Produktlinks (auch in Werbelinks kodiert).
+  function asinsIn(element) {
+    const asins = new Set();
+    for (const el of [element, ...element.querySelectorAll(ASIN_SOURCES)]) {
+      const asin = asinOf(el);
+      if (asin) asins.add(asin);
+    }
+    return asins;
+  }
+
+  // Kleinster Bereich um den Preis mit genau einem Artikel und dessen Titel: die Karte dieses Angebots.
+  // Kleinster, weil größere Bereiche oft schon die Überschrift ihres Abschnitts enthalten.
+  function cardOf(priceEl) {
+    let el = priceEl.parentElement;
+    for (let depth = 0; el && el !== document.body && depth < CARD_MAX_DEPTH; depth++, el = el.parentElement) {
+      const asins = asinsIn(el);
+      if (asins.size > 1) return null;
+      if (asins.size === 1) {
+        const title = readCardTitle(el);
+        if (title) return { element: el, asin: asins.values().next().value, title };
+      }
+    }
+    return null;
+  }
+
+  // Teile eines Titels ("Marke" + "Rest") zusammen, aber derselbe Titel in Lang- und Kurzfassung nur einmal.
+  function joinDistinct(texts) {
+    const parts = texts.map((text) => text.replace(/\s+/g, ' ').trim()).filter(Boolean);
+    return parts.filter((part, i) => !parts.some((other, j) => j !== i && other.includes(part) && (other !== part || j < i))).join(' ');
+  }
+
+  function readCardTitle(card) {
+    const candidates = CARD_TITLES.map((selector) => joinDistinct(Array.from(card.querySelectorAll(selector), (el) => el.textContent)));
+    const image = card.querySelector('img[alt]');
+    if (image) candidates.push(image.getAttribute('alt'));
+    const title = candidates.map((text) => text.replace(/\s+/g, ' ').trim()).find((text) => text.length >= CARD_MIN_TITLE);
+    return title || '';
+  }
+
+  // Das Abzeichen gehört unter den Preis, nie in einen Link hinein.
+  function cardAnchor(card, priceEl) {
+    const recipe = card.querySelector('[data-cy="price-recipe"]');
+    if (recipe) return recipe;
+    const priceLink = priceEl.closest('a');
+    if (priceLink && priceLink !== card && card.contains(priceLink)) return priceLink.parentElement;
+    return priceEl.parentElement;
+  }
+
+  function readOfferCards() {
     const offers = [];
-    document.querySelectorAll(RECOMMENDATION_CARDS).forEach((card, index) => {
-      const priceEl = card.querySelector('.a-price:not(.a-text-price)');
-      const link = card.querySelector('a[href*="/dp/"]');
-      const href = link ? link.getAttribute('href') : '';
-      const asin = card.dataset.asin || (href.match(ASIN_IN_URL) || [])[1];
-      const title = readCardTitle(card);
-      if (!priceEl || !asin || !title) return;
-      // Der Preis steht in einem Link; das Abzeichen kommt daneben, nicht in den Link.
-      const priceLink = priceEl.closest('a');
+    const seen = new Set();
+    for (const priceEl of document.querySelectorAll(CARD_PRICE)) {
+      if (priceEl.closest(OWN_READER_AREAS) || priceEl.closest(STRIKE)) continue;
+      const card = cardOf(priceEl);
+      if (!card || seen.has(card.element)) continue;
+      seen.add(card.element);
+      const title = card.title;
+      const price = readPrice(card.element);
+      if (!price) continue;
+      const link = Array.from(card.element.querySelectorAll('a[href]')).find((a) => asinOfLink(a) === card.asin);
       offers.push({
-        key: 'card:' + asin + ':' + index,
-        asin,
-        element: card,
-        anchor: priceLink && card.contains(priceLink.parentElement) ? priceLink.parentElement : card,
+        key: 'card:' + card.asin + ':' + offers.length,
+        asin: card.asin,
+        element: card.element,
+        anchor: cardAnchor(card.element, priceEl),
         title,
         text: title,
-        price: readPrice(card),
-        amazonUnitPriceText: readAmazonUnitPrice(card),
-        url: href ? absoluteUrl(href) : absoluteUrl('/dp/' + asin)
+        price,
+        amazonUnitPriceText: readAmazonUnitPrice(card.element),
+        url: absoluteUrl(link ? link.getAttribute('href') : '/dp/' + card.asin)
       });
-    });
+    }
     return offers;
   }
 
@@ -184,10 +249,10 @@
     return Boolean(document.querySelector('#productTitle'));
   }
 
-  /** Alle Angebote der aktuellen Seite: Produkt mit Varianten, sonst Suchtreffer und Empfehlungskacheln. */
+  /** Alle Angebote der Seite: Produkt mit Varianten oder Suchtreffer, dazu jede weitere Angebotskarte. */
   function readOffers() {
-    if (isProductPage()) return readMainOffer().concat(readVariantSwatches());
-    return readSearchResults().concat(readRecommendationCards());
+    const page = isProductPage() ? readMainOffer().concat(readVariantSwatches()) : readSearchResults();
+    return page.concat(readOfferCards());
   }
 
   ns.amazonDom = { readOffers };
