@@ -60,8 +60,9 @@
   function scan() {
     if (!ns.runtime.alive()) return stop();
     const settings = ns.settings.get();
-    const entries = computeEntries(ns.amazonDom.readOffers(), settings);
-    const { compared, duplicates } = splitDuplicates(entries);
+    const { kept, dropped } = ns.ranking.dropOutliers(computeEntries(ns.amazonDom.readOffers(), settings));
+    for (const entry of dropped) ns.badge.removeBadge(entry.offer.anchor);
+    const { compared, duplicates } = splitDuplicates(kept);
     const ranking = ns.ranking.rankEntries(compared);
     for (const entry of compared) entry.rank = ranking.get(entry.id);
     for (const { entry, twin } of duplicates) entry.rank = twin.rank;

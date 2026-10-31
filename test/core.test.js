@@ -59,7 +59,8 @@ const QUANTITY_CASES = [
   ['Gas Bullet ® Gaskartusche 227g passend für Gaskocher (MSF-1a) | Butan | Ideal für Camping/Outdoorküchen/Notfälle (28)', 'mass', 6.356],
   ['Trockenfutter für Katzen 4 kg Huhn', 'mass', 4],
   ['campcooga 227 Gramm Gaskartuschen 4 bis 28 Stück Camping Butan EN417 MSF1a', 'mass', 0.227],
-  ['Bluecraft 6 Zylinder CO2 425g', 'mass', 2.55]
+  ['Bluecraft 6 Zylinder CO2 425g', 'mass', 2.55],
+  ['IMEX Gaskartuschen 227g MSF-1a – Hochwertiges Butan-Gas für Campingkocher & mehr (28 x)', 'mass', 6.356]
 ];
 
 for (const [title, dimension, amount] of QUANTITY_CASES) {
@@ -151,17 +152,16 @@ test('Stückzahl aus dem Shop-Preis je Stück (HELF-102)', () => {
   assert.equal(uneven.quantity.items, 1);
 });
 
-test('Shop-Grundpreis für ein einzelnes Stück einer Packung wird überstimmt (HELF-102)', () => {
+test('Widersprechen sich Shop-Grundpreis und Rechnung, kein Einheitspreis (HELF-103)', () => {
+  // NAYVER: Shop rechnet eine Kartusche (110,09 €/kg), Titel nennt 28, Bild zeigt 12
   const offer = {
-    text: 'Gas Bullet ® Gaskartusche 227g | Butan | Ideal für Camping/Outdoorküchen/Notfälle (28)',
-    price: { amount: 27.99, currency: 'EUR' },
-    amazonUnitPriceText: '122,91 € / kg'
+    text: 'NAYVER Propan-Butan Mix Gaskartusche MSF-1A, 227g | Wintertauglich (28)',
+    price: { amount: 24.99, currency: 'EUR' },
+    amazonUnitPriceText: '110,09 € / kg'
   };
-  const unitPrice = computeUnitPrice(offer, {});
-  assert.equal(unitPrice.source, 'computed');
-  assert.ok(Math.abs(unitPrice.unitPrice - 27.99 / 6.356) < 0.01);
-  const honest = computeUnitPrice({ ...offer, amazonUnitPriceText: '4,40 € / kg' }, {});
-  assert.equal(honest.source, 'amazon');
+  assert.equal(computeUnitPrice(offer, {}), null);
+  const agreeing = computeUnitPrice({ ...offer, amazonUnitPriceText: '3,93 € / kg' }, {});
+  assert.equal(agreeing.source, 'amazon');
 });
 
 test('Spanne von Stückzahlen: ohne Preis je Stück keine Rechnung (HELF-102)', () => {
@@ -169,4 +169,15 @@ test('Spanne von Stückzahlen: ohne Preis je Stück keine Rechnung (HELF-102)', 
   assert.equal(computeUnitPrice(offer, {}), null);
   const withShop = computeUnitPrice({ ...offer, amazonUnitPriceText: '1,14 € / Stück' }, {});
   assert.equal(withShop.quantity.items, 28);
+});
+
+test('Ausreißer weit über dem Median der Gruppe fallen heraus (HELF-103)', () => {
+  const { dropOutliers } = require('../core/ranking.js');
+  const entry = (id, value) => ({ id, unitPrice: { dimension: 'mass', unitKey: 'kg', currency: 'EUR', unitPrice: value } });
+  const pack = [4.4, 4.7, 4.9, 5.0, 6.6, 7.7].map((v, i) => entry('p' + i, v));
+  const { kept, dropped } = dropOutliers(pack.concat([entry('stahlmann', 132), entry('kleinstflasche', 70)]));
+  assert.deepEqual(dropped.map((e) => e.id), ['stahlmann']);
+  assert.equal(kept.length, 7);
+  // kleine Gruppen bleiben unangetastet
+  assert.equal(dropOutliers([entry('a', 4), entry('b', 132)]).dropped.length, 0);
 });

@@ -92,8 +92,8 @@
     // "100 x Wattestäbchen", "28 x MaXimum", aber nicht Anschlüsse wie "2 × M.2" oder "4 x HDMI":
     // ein Wort aus mindestens drei Buchstaben mit einem Kleinbuchstaben.
     /(?:^|[\s(,])(\d{1,3})\s*[x×X]\s+(?=\p{L}{3})\p{L}*\p{Ll}/u,
-    // Stückzahl in Klammern am Ende des Titels: "... Notfälle (28)"
-    /\((\d{1,3})\)\s*$/,
+    // Stückzahl in Klammern am Ende des Titels: "... Notfälle (28)", "... & mehr (28 x)"
+    /\((\d{1,3})\s*[x×]?\)\s*$/,
     // "28 Premium Gaskartuschen", "6 Zylinder": Behälter im Plural, davor höchstens ein Wort;
     // nie eine Menge mit Einheit ("227 Gramm Gaskartuschen").
     new RegExp('\\b(\\d{1,3})(?!\\s?(?:' + UNIT_ALTERNATION + ')(?![\\p{L}\\d]))\\s*(?:[x×]\\s*)?\\s(?:[\\p{L}\\d-]+\\s+)?' +

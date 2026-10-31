@@ -48,14 +48,16 @@
     return Object.assign({}, quantity, { amount: quantity.amount * pieces, items: pieces });
   }
 
-  // Grundpreise des Shops gelten bisweilen für ein einzelnes Stück einer Packung ("28 x 227g" zu 27,99 €,
-  // Shop: 122,91 €/kg). Ist der Shop-Wert um genau die erkannte Stückzahl zu hoch, gilt die eigene Rechnung.
-  const PACK_MISMATCH_TOLERANCE = 0.03;
+  // Widersprechen sich Shop-Grundpreis und eigene Rechnung derselben Einheit deutlich, ist unklar, was stimmt
+  // (Shop rechnet eine Kartusche, Titel nennt eine Packung, Bild eine andere): dann lieber kein Einheitspreis.
+  // Gemessen stimmen beide sonst auf wenige Prozent überein.
+  const CONFLICT_FACTOR = 1.5;
 
-  function shopIgnoresPack(amazon, computed) {
-    if (!computed || !computed.quantity || computed.quantity.items < 2 || amazon.dimension !== computed.dimension) return false;
-    const ratio = amazon.pricePerBase / (computed.unitPrice / displayUnitFactor(computed));
-    return Math.abs(ratio - computed.quantity.items) / computed.quantity.items <= PACK_MISMATCH_TOLERANCE;
+  function sourcesConflict(amazon, computed) {
+    if (!computed || amazon.dimension !== computed.dimension) return false;
+    const own = computed.unitPrice / displayUnitFactor(computed);
+    const ratio = amazon.pricePerBase / own;
+    return ratio > CONFLICT_FACTOR || ratio < 1 / CONFLICT_FACTOR;
   }
 
   function displayUnitFactor(unitPrice) {
@@ -134,7 +136,8 @@
     if (computed && PREFERRED_OVER_AMAZON.has(computed.dimension)) return computed;
 
     const amazonOnlyPerPiece = amazon && amazon.dimension === 'count' && computed && computed.dimension !== 'count';
-    if (amazon && !amazonOnlyPerPiece && !shopIgnoresPack(amazon, computed)) {
+    if (amazon && !amazonOnlyPerPiece) {
+      if (sourcesConflict(amazon, computed)) return null;
       return result(amazon.dimension, amazon.pricePerBase, amazon.currency, 'amazon',
         quantity && quantity.dimension === amazon.dimension ? quantity : null, config, amazon.label);
     }
