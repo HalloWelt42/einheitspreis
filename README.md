@@ -37,7 +37,7 @@ Der Rechenkern (`core/`) ist frei von Browser-Schnittstellen und liest die Menge
 | Grundpreis des Shops ("12,60 €/l"), außer er lautet nur "€/Stück" | 2 |
 | Liter, Kilogramm, Stück aus dem Text | 3 |
 
-Berücksichtigt werden Faktoren ("6 x 1,5 l", "12x0,5l", "6 x 12 x 85g"), Packungen ("3er Pack", "2 Packungen mit 1 kg" ohne Doppelzählung), deutsche und englische Zahlen ("1.000 g", "1,5 l", "1.595 lt."). Verworfen werden Raten, Grenzwerte und Arbeitsspeicher ("180 TB/Jahr", "7.400 MB/s", "bis zu 24 TB", "8GB DDR4"); "256 MB Cache" verliert gegen die Kapazität.
+Berücksichtigt werden Faktoren ("6 x 1,5 l", "12x0,5l", "6 x 12 x 85g", "12x 600ml (338g)"), Packungen ("3er Pack", "28 Stück", "28 Premium Gaskartuschen", "... (28)", "2 Packungen mit 1 kg" ohne Doppelzählung), deutsche und englische Zahlen ("1.000 g", "1,5 l", "1.595 lt.", "256-GB-Karte"). Nennt der Shop nur einen Preis je Stück, ergibt sich daraus die Stückzahl; gilt sein Grundpreis erkennbar nur für ein Stück der Packung, zählt die eigene Rechnung. Gewicht geht vor Volumen ("CO2-Zylinder 425g/60l"). Verworfen werden Raten, Grenzwerte, Passformen und Arbeitsspeicher ("180 TB/Jahr", "7.400 MB/s", "bis zu 24 TB", "für 5- & 11kg-Flaschen", "8GB DDR4"); "256 MB Cache" verliert gegen die Kapazität.
 
 Geprüft ist die Erkennung an 910 echten Suchtreffern aus Speicher, Lebensmitteln, Waschmittel, Batterien und Tierfutter (`test/fixtures`).
 

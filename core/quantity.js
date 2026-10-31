@@ -9,8 +9,9 @@
 
   const ns = (root.Einheitspreis = root.Einheitspreis || {});
 
-  // Reihenfolge = Vorrang, wenn ein Text mehrere Dimensionen nennt.
-  const DIMENSION_ORDER = ['storage', 'load', 'portion', 'volume', 'mass', 'count'];
+  // Reihenfolge = Vorrang, wenn ein Text mehrere Dimensionen nennt. Gewicht vor Volumen: steht beides da, ist das
+  // Volumen meist Ausbeute oder Gefäß ("CO2-Zylinder 425g/60l", "Butangas 500g, 899 ml", "14kg Gasflasche 24,4l").
+  const DIMENSION_ORDER = ['storage', 'load', 'portion', 'mass', 'volume', 'count'];
 
   // Einheit -> Dimension und Faktor zur Basiseinheit.
   // anyCase: auch "4tb", "5KG"; einzelne Buchstaben wie "g" nur exakt ("5G" ist kein Gramm).
@@ -33,6 +34,8 @@
     { pattern: 'Tabs|Tabletten|Kapseln|Caps|Pods|Pads', dimension: 'portion', factor: 1, anyCase: true },
     { pattern: 'Stück|Stk\\.?|St\\.|pcs|pieces?', dimension: 'count', factor: 1, anyCase: true }
   ];
+
+  const COUNT_LABEL = 'Stück';
 
   // Gezählte Dimensionen kennen keine Dezimalzahlen: "1.000 Stück" sind tausend.
   const COUNTED_DIMENSIONS = new Set(['load', 'portion', 'count']);
@@ -61,9 +64,21 @@
   // Mengen nach diesen Wörtern sind Grenzwerte, keine Inhalte ("bis zu 24 TB").
   const LIMIT_CONTEXT_RE = /(?:bis(?:\s+zu)?|max\.?|maximal|unterstützt|kompatibel(?:\s+mit)?|up\s+to|supports?)\s*$/i;
 
+  // Gewicht und Volumen nach "für" sind Ausbeute oder Passform, kein Inhalt ("für 60 L Wasser",
+  // "Regler für 5 kg und 11 kg Flaschen", "Für DE/AT 5- & 11kg-Flaschen"). Waschladungen ("für 40 Wäschen") sind
+  // dagegen Inhalt, ebenso "für Katzen 4 kg": dazwischen stehen nur Zahlen, Bindewörter und Länderkürzel.
+  const FOR_CONTEXT_RE = /(?<!\p{L})[Ff]ür(?:\s*(?:\d[\d.,]*\s*\p{L}{0,6}\.?|\p{Lu}{2,3}(?:\/\p{Lu}{2,3})*(?!\p{L})|und|oder|&|\/|,|-))*\s*$/u;
+  const FOR_CONTEXT_DIMENSIONS = new Set(['mass', 'volume']);
+
   // Arbeitsspeicher eines Geräts ist kein Speicherplatz ("8GB DDR4", "16 GB RAM", "RAM: 8 GB").
   const MEMORY_AFTER_RE = /^\s*(?:(?:LP)?DDR\d|S?D?RAM\b|Arbeitsspeicher|Hauptspeicher)/i;
   const MEMORY_BEFORE_RE = /(?:\bRAM|Arbeitsspeicher|Hauptspeicher)\s*:?\s*$/i;
+
+  // "8 Stück" als Packungsgröße: nur bei Speicher, Gewicht und Volumen, nicht als Schätzung ("ca. 500 Stück")
+  // und nicht bei Portionsware, deren Stückzahl dieselbe Menge zählt ("10 kg Spülmaschinentabs, 500 Stück").
+  const PIECE_PACK_RE = /(?<!ca\.?\s*)(?:^|[\s(,–-])(\d{1,3})\s*(?:Stück|Stk\.?)(?!\p{L})/iu;
+  const PIECE_PACK_DIMENSIONS = new Set(['storage', 'mass', 'volume']);
+  const PORTION_WORD_RE = /tabs|tabletten|kapseln|caps\b|pods|pads/i;
 
   // Packungsgröße irgendwo im Text.
   const PACK_RES = [
@@ -72,8 +87,13 @@
     /\b(\d{1,3})[\s-]*(?:Pack|Pck\.?)\b/i,
     /\bPack\s+of\s+(\d{1,3})\b/i,
     /\b(\d{1,3})\s+(?:Flaschen|Dosen|Packungen|Kanister|Beuteln?|Portionsbeuteln?|Gläser|Karten)\b/i,
-    // "100 x Wattestäbchen", aber nicht Anschlüsse wie "2 × M.2" oder "4 x HDMI": ein Wort mit Kleinbuchstaben.
-    /(?:^|[\s(,])(\d{1,3})\s*[x×]\s+\p{Lu}?\p{Ll}{2,}/u,
+    // "100 x Wattestäbchen", "28 x MaXimum", aber nicht Anschlüsse wie "2 × M.2" oder "4 x HDMI":
+    // ein Wort aus mindestens drei Buchstaben mit einem Kleinbuchstaben.
+    /(?:^|[\s(,])(\d{1,3})\s*[x×X]\s+(?=\p{L}{3})\p{L}*\p{Ll}/u,
+    // Stückzahl in Klammern am Ende des Titels: "... Notfälle (28)"
+    /\((\d{1,3})\)\s*$/,
+    // "28 Premium Gaskartuschen", "6 Zylinder": Behälter im Plural, davor höchstens ein Wort.
+    /\b(\d{1,3})\s*(?:[x×]\s*)?\s(?:[\p{L}\d-]+\s+)?(?:Gaskartuschen|Kartuschen|Zylinder|Patronen|Gasflaschen|Druckgasdosen)\b/iu,
     /\b(\d{1,3})er(?![\s-]*Jahre)\b/i
   ];
 
@@ -117,6 +137,12 @@
     return 1;
   }
 
+  function findPiecePack(text, dimension) {
+    if (!PIECE_PACK_DIMENSIONS.has(dimension) || PORTION_WORD_RE.test(text)) return 1;
+    const match = text.match(PIECE_PACK_RE);
+    return match ? Number(match[1]) : 1;
+  }
+
   function isMemory(prefix, rest) {
     return MEMORY_BEFORE_RE.test(prefix) || MEMORY_AFTER_RE.test(rest.slice(0, 24));
   }
@@ -129,6 +155,7 @@
       if (!unit) continue;
       const prefix = text.slice(Math.max(0, match.index - 24), match.index);
       if (LIMIT_CONTEXT_RE.test(prefix)) continue;
+      if (FOR_CONTEXT_DIMENSIONS.has(unit.dimension) && FOR_CONTEXT_RE.test(prefix)) continue;
       if (unit.dimension === 'storage' && isMemory(prefix, text.slice(match.index + match[0].length))) continue;
       const value = parseNumber(match[1], COUNTED_DIMENSIONS.has(unit.dimension) ? 0 : unit.factor);
       if (!Number.isFinite(value) || value <= 0) continue;
@@ -138,7 +165,9 @@
         dimension: unit.dimension,
         amount: value * unit.factor,
         multiplier,
-        text: match[0]
+        text: match[0],
+        start: match.index,
+        end: match.index + match[0].length
       });
     }
     return found;
@@ -150,12 +179,19 @@
    * ("2 kg (2 Packungen mit 1 kg)").
    */
   function packFactor(text, chosen, candidates) {
-    if (chosen.multiplier > 1) return 1;
-    const pack = findPackSize(text);
+    if (chosen.multiplier > 1 || chosen.dimension === 'count') return 1;
+    const pack = Math.max(findPackSize(text), findPiecePack(text, chosen.dimension));
     if (pack === 1) return 1;
     const total = chosen.amount;
     const alreadySum = candidates.some((c) => c !== chosen && Math.abs(c.amount * c.multiplier * pack - total) < total * 0.01);
     return alreadySum ? 1 : pack;
+  }
+
+  // "12x 600ml (338g)": die Angabe in Klammern beschreibt dasselbe Einzelstück und erbt dessen Faktor.
+  function withNeighbourMultiplier(text, chosen, all) {
+    if (chosen.multiplier > 1) return chosen;
+    const neighbour = all.find((q) => q.multiplier > 1 && q.end <= chosen.start && /^\s*\(\s*$/.test(text.slice(q.end, chosen.start)));
+    return neighbour ? Object.assign({}, chosen, { multiplier: neighbour.multiplier }) : chosen;
   }
 
   /**
@@ -171,7 +207,8 @@
     for (const dimension of DIMENSION_ORDER) {
       const candidates = all.filter((q) => q.dimension === dimension);
       if (candidates.length === 0) continue;
-      const chosen = candidates.reduce((a, b) => (b.amount * b.multiplier > a.amount * a.multiplier ? b : a));
+      const best = candidates.reduce((a, b) => (b.amount * b.multiplier > a.amount * a.multiplier ? b : a));
+      const chosen = withNeighbourMultiplier(normalized, best, all);
       const pack = packFactor(normalized, chosen, candidates);
       return {
         dimension,
@@ -183,7 +220,7 @@
     }
     const pack = findPackSize(normalized);
     if (pack > 1) {
-      return { dimension: 'count', amount: pack, perItem: 1, items: pack, text: pack + 'er' };
+      return { dimension: 'count', amount: pack, perItem: pack, items: 1, text: pack + ' ' + COUNT_LABEL };
     }
     return null;
   }

@@ -31,6 +31,38 @@
   // Dimensionen, deren Rechnung aus dem Text Amazons Grundpreis schlägt.
   const PREFERRED_OVER_AMAZON = new Set(['storage', 'load', 'portion']);
 
+  // Preis je Stück aus dem Shop verrät die Stückzahl, wenn der Titel sie verschweigt:
+  // "Gaskartusche 227g", 30,99 € bei 1,11 €/Stück sind 28 Kartuschen. Zugelassen ist nur die Rundung
+  // des Shops auf ganze Cent: je Stück höchstens ein halber Cent, dazu ein Cent für den Gesamtpreis.
+  const CENT_ROUNDING = 0.005;
+
+  function piecesFromShopPrice(price, amazon) {
+    if (!price || !amazon || amazon.dimension !== 'count' || !(amazon.pricePerBase > 0)) return 1;
+    const pieces = Math.round(price.amount / amazon.pricePerBase);
+    const deviation = Math.abs(price.amount - pieces * amazon.pricePerBase);
+    return pieces >= 2 && deviation <= pieces * CENT_ROUNDING + 2 * CENT_ROUNDING ? pieces : 1;
+  }
+
+  function withPieces(quantity, pieces) {
+    if (!quantity || pieces <= 1 || quantity.items > 1 || quantity.dimension === 'count') return quantity;
+    return Object.assign({}, quantity, { amount: quantity.amount * pieces, items: pieces });
+  }
+
+  // Grundpreise des Shops gelten bisweilen für ein einzelnes Stück einer Packung ("28 x 227g" zu 27,99 €,
+  // Shop: 122,91 €/kg). Ist der Shop-Wert um genau die erkannte Stückzahl zu hoch, gilt die eigene Rechnung.
+  const PACK_MISMATCH_TOLERANCE = 0.03;
+
+  function shopIgnoresPack(amazon, computed) {
+    if (!computed || !computed.quantity || computed.quantity.items < 2 || amazon.dimension !== computed.dimension) return false;
+    const ratio = amazon.pricePerBase / (computed.unitPrice / displayUnitFactor(computed));
+    return Math.abs(ratio - computed.quantity.items) / computed.quantity.items <= PACK_MISMATCH_TOLERANCE;
+  }
+
+  function displayUnitFactor(unitPrice) {
+    const units = DISPLAY_UNITS[unitPrice.dimension];
+    return units && units[unitPrice.unitKey] !== undefined ? units[unitPrice.unitKey] : 1;
+  }
+
   function displayUnitFor(dimension, settings) {
     if (dimension === 'storage') {
       const key = settings.storageUnit === 'GB' ? 'GB' : 'TB';
@@ -90,17 +122,17 @@
    */
   function computeUnitPrice(offer, settings) {
     const config = Object.assign({}, DEFAULT_SETTINGS, settings);
-    const quantity = parseQuantity(offer.text);
     const price = offer.price;
+    const amazon = parseAmazonUnitPrice(offer.amazonUnitPriceText);
+    const quantity = withPieces(parseQuantity(offer.text), piecesFromShopPrice(price, amazon));
 
     const computed = price && quantity
       ? result(quantity.dimension, price.amount / quantity.amount, price.currency, 'computed', quantity, config)
       : null;
     if (computed && PREFERRED_OVER_AMAZON.has(computed.dimension)) return computed;
 
-    const amazon = parseAmazonUnitPrice(offer.amazonUnitPriceText);
     const amazonOnlyPerPiece = amazon && amazon.dimension === 'count' && computed && computed.dimension !== 'count';
-    if (amazon && !amazonOnlyPerPiece) {
+    if (amazon && !amazonOnlyPerPiece && !shopIgnoresPack(amazon, computed)) {
       return result(amazon.dimension, amazon.pricePerBase, amazon.currency, 'amazon',
         quantity && quantity.dimension === amazon.dimension ? quantity : null, config, amazon.label);
     }
