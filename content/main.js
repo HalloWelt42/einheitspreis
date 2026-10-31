@@ -9,15 +9,20 @@
   root.__einheitspreisStarted = true;
 
   const ns = root.Einheitspreis;
+  // Nach der letzten Änderung kurz Ruhe abwarten, aber nie länger als SCAN_MAX_WAIT_MS nach der ersten:
+  // Amazon ändert die Seite oft ununterbrochen (gemessen: 240 Änderungen ohne eine Pause von 500 ms).
   const SCAN_DELAY_MS = 500;
+  const SCAN_MAX_WAIT_MS = 1500;
   const OWN_ELEMENTS = '.ep-badge, #einheitspreis-panel-host';
 
   let timer = null;
+  let pendingSince = null;
   let observer = null;
 
   // Ohne Verbindung zur Erweiterung still aufhören (siehe runtime.js).
   function stop() {
     clearTimeout(timer);
+    pendingSince = null;
     if (observer) observer.disconnect();
     ns.panel.remove();
   }
@@ -65,8 +70,15 @@
   }
 
   function schedule() {
+    const now = Date.now();
+    if (pendingSince === null) pendingSince = now;
     clearTimeout(timer);
-    timer = setTimeout(scan, SCAN_DELAY_MS);
+    timer = setTimeout(scheduledScan, Math.max(0, Math.min(SCAN_DELAY_MS, pendingSince + SCAN_MAX_WAIT_MS - now)));
+  }
+
+  function scheduledScan() {
+    pendingSince = null;
+    scan();
   }
 
   function isOwnMutation(mutation) {
