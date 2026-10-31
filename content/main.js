@@ -15,15 +15,11 @@
   let timer = null;
   let observer = null;
 
-  // Nach dem Neuladen oder Entfernen der Erweiterung läuft dieses Skript im offenen Tab weiter,
-  // erreicht den Browser aber nicht mehr ("Extension context invalidated"): dann still aufhören.
-  function extensionAlive() {
-    return Boolean(root.chrome && chrome.runtime && chrome.runtime.id);
-  }
-
+  // Ohne Verbindung zur Erweiterung still aufhören (siehe runtime.js).
   function stop() {
     clearTimeout(timer);
     if (observer) observer.disconnect();
+    ns.panel.remove();
   }
 
   function computeEntries(offers, settings) {
@@ -50,7 +46,7 @@
   }
 
   function scan() {
-    if (!extensionAlive()) return stop();
+    if (!ns.runtime.alive()) return stop();
     const settings = ns.settings.get();
     const entries = computeEntries(ns.amazonDom.readOffers(), settings);
     const { compared, duplicates } = splitDuplicates(entries);
@@ -79,7 +75,7 @@
     ns.settings.onChange(scan);
     scan();
     observer = new MutationObserver((mutations) => {
-      if (!extensionAlive()) return stop();
+      if (!ns.runtime.alive()) return stop();
       if (mutations.every(isOwnMutation)) return;
       schedule();
     });

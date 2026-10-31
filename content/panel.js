@@ -21,6 +21,14 @@
     return element;
   }
 
+  // Jeder Knopf des Fensters: ohne Verbindung zur Erweiterung verschwindet das Fenster statt zu handeln.
+  function onClick(element, action) {
+    element.addEventListener('click', (event) => {
+      if (!ns.runtime.alive()) return remove();
+      action(event);
+    });
+  }
+
   function icon(name) {
     const span = el('span', 'ep-icon');
     span.innerHTML = ns.icons[name];
@@ -60,7 +68,7 @@
       button.append(el('span', 'ep-toggle-best', priceText(best.unitPrice)));
       button.append(el('span', 'ep-toggle-count', String(group.entries.length)));
     }
-    button.addEventListener('click', () => ns.settings.update({ panelOpen: !open }));
+    onClick(button, () => ns.settings.update({ panelOpen: !open }));
     return button;
   }
 
@@ -69,7 +77,7 @@
     for (const group of groups) {
       const tab = el('button', 'ep-tab' + (group.key === current.key ? ' ep-tab-active' : ''), group.label);
       tab.type = 'button';
-      tab.addEventListener('click', () => {
+      onClick(tab, () => {
         selectedGroup = group.key;
         render(lastState);
       });
@@ -84,7 +92,7 @@
     for (const unit of ['TB', 'GB']) {
       const button = el('button', 'ep-switch-option' + (settings.storageUnit === unit ? ' ep-switch-active' : ''), unit);
       button.type = 'button';
-      button.addEventListener('click', () => ns.settings.update({ storageUnit: unit }));
+      onClick(button, () => ns.settings.update({ storageUnit: unit }));
       wrap.append(button);
     }
     return wrap;
@@ -115,7 +123,7 @@
     if (entry.offer.url) title.href = entry.offer.url;
     title.addEventListener('click', (event) => event.stopPropagation());
     row.append(title);
-    row.addEventListener('click', () => showOnPage(entry));
+    onClick(row, () => showOnPage(entry));
     row.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') showOnPage(entry);
     });
@@ -130,7 +138,7 @@
     close.type = 'button';
     close.setAttribute('aria-label', t('btnClose'));
     close.append(icon('xmark'));
-    close.addEventListener('click', () => ns.settings.update({ panelOpen: false }));
+    onClick(close, () => ns.settings.update({ panelOpen: false }));
     header.append(close);
     panel.append(header);
 
@@ -171,5 +179,12 @@
     host.hidden = state.entries.length === 0 && !state.settings.panelOpen;
   }
 
-  ns.panel = { render };
+  // Ohne Verbindung zur Erweiterung tut kein Knopf mehr etwas: Fenster ganz entfernen.
+  function remove() {
+    if (host) host.remove();
+    host = null;
+    shadow = null;
+  }
+
+  ns.panel = { render, remove };
 })(globalThis);
