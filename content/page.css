@@ -1,0 +1,86 @@
+/* Abzeichen direkt in Amazons Seite: alles mit ep- vorangestellt. */
+
+@font-face {
+  font-family: 'Einheitspreis Chakra Petch';
+  font-weight: 500;
+  font-display: swap;
+  src: url('chrome-extension://__MSG_@@extension_id__/vendor/fonts/chakra-petch-latin-500-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Einheitspreis Chakra Petch';
+  font-weight: 700;
+  font-display: swap;
+  src: url('chrome-extension://__MSG_@@extension_id__/vendor/fonts/chakra-petch-latin-700-normal.woff2') format('woff2');
+}
+
+.ep-badge {
+  --ep-bg: #e7e5e4;
+  --ep-fg: #1c1917;
+  --ep-accent: #78716c;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  margin: 6px 0 2px;
+  padding: 4px 9px 5px;
+  border-left: 4px solid var(--ep-accent);
+  border-radius: 6px;
+  background: var(--ep-bg);
+  color: var(--ep-fg);
+  font-family: 'Einheitspreis Chakra Petch', system-ui, sans-serif;
+  line-height: 1.2;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.ep-badge-price {
+  font-size: 17px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ep-badge-detail {
+  font-size: 15px;
+  font-weight: 500;
+  opacity: 0.85;
+  overflow-wrap: anywhere;
+}
+
+.ep-badge.ep-tier-best   { --ep-bg: #dcfce7; --ep-fg: #14532d; --ep-accent: #16a34a; }
+.ep-badge.ep-tier-good   { --ep-bg: #ecfccb; --ep-fg: #365314; --ep-accent: #65a30d; }
+.ep-badge.ep-tier-mid    { --ep-bg: #fef9c3; --ep-fg: #713f12; --ep-accent: #ca8a04; }
+.ep-badge.ep-tier-high   { --ep-bg: #fee2e2; --ep-fg: #7f1d1d; --ep-accent: #dc2626; }
+.ep-badge.ep-tier-single { --ep-bg: #e0f2fe; --ep-fg: #0c4a6e; --ep-accent: #0284c7; }
+
+/* Variantenkacheln sind eng: Abzeichen kompakt und ohne Rangtext-Umbruch. */
+.text-swatch-container > .ep-badge,
+.a-button-inner > .ep-badge {
+  display: flex;
+  margin: 4px 6px 6px;
+  padding: 3px 6px;
+}
+
+.text-swatch-container > .ep-badge .ep-badge-price,
+.a-button-inner > .ep-badge .ep-badge-price {
+  font-size: 15px;
+}
+
+.text-swatch-container > .ep-badge .ep-badge-detail,
+.a-button-inner > .ep-badge .ep-badge-detail {
+  font-size: 13px;
+}
+
+/* Kurz aufleuchten, wenn die Vergleichsliste zu einem Treffer springt. */
+.ep-flash {
+  animation: ep-flash 1.6s ease-out;
+}
+
+@keyframes ep-flash {
+  0%, 30% { box-shadow: 0 0 0 4px #16a34a; }
+  100%    { box-shadow: 0 0 0 4px transparent; }
+}
+
+.ep-badge-detail:empty {
+  display: none;
+}

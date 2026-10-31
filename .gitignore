@@ -1,0 +1,7 @@
+.claude/
+.DS_Store
+._*
+node_modules/
+store/
+*.zip
+test/live/

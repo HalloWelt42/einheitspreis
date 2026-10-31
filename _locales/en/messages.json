@@ -1,0 +1,87 @@
+{
+  "appName": {
+    "message": "Einheitspreis"
+  },
+  "appDescription": {
+    "message": "Shows the price per TB, GB, litre, kilogram, wash load or piece on Amazon and ranks offers by it."
+  },
+  "panelTitle": {
+    "message": "Unit prices compared"
+  },
+  "listHint": {
+    "message": "Cheapest unit price first. Click jumps to the offer."
+  },
+  "emptyList": {
+    "message": "No quantity was recognised on this page."
+  },
+  "btnClose": {
+    "message": "Close"
+  },
+  "labelStoragePer": {
+    "message": "Storage per"
+  },
+  "rankOf": {
+    "message": "Rank $1 of $2",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      },
+      "2": {
+        "content": "$2"
+      }
+    }
+  },
+  "sourceAmazon": {
+    "message": "Unit price by Amazon"
+  },
+  "unitTB": {
+    "message": "TB"
+  },
+  "unitGB": {
+    "message": "GB"
+  },
+  "unitLoad": {
+    "message": "load"
+  },
+  "unitPortion": {
+    "message": "pc"
+  },
+  "unitLiter": {
+    "message": "l"
+  },
+  "unitKilogram": {
+    "message": "kg"
+  },
+  "unitPiece": {
+    "message": "pc"
+  },
+  "dimensionStorage": {
+    "message": "Storage"
+  },
+  "dimensionLoad": {
+    "message": "Wash load"
+  },
+  "dimensionPortion": {
+    "message": "Portion"
+  },
+  "dimensionVolume": {
+    "message": "Volume"
+  },
+  "dimensionMass": {
+    "message": "Weight"
+  },
+  "dimensionCount": {
+    "message": "Count"
+  },
+  "rankShort": {
+    "message": "#$1/$2",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      },
+      "2": {
+        "content": "$2"
+      }
+    }
+  }
+}

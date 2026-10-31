@@ -1,0 +1,87 @@
+{
+  "appName": {
+    "message": "Einheitspreis"
+  },
+  "appDescription": {
+    "message": "Zeigt auf Amazon den Preis pro TB, GB, Liter, Kilogramm, Waschladung oder Stück und sortiert Angebote danach."
+  },
+  "panelTitle": {
+    "message": "Einheitspreise im Vergleich"
+  },
+  "listHint": {
+    "message": "Günstigster Einheitspreis zuerst. Klick springt zum Angebot."
+  },
+  "emptyList": {
+    "message": "Auf dieser Seite wurde keine Menge erkannt."
+  },
+  "btnClose": {
+    "message": "Schließen"
+  },
+  "labelStoragePer": {
+    "message": "Speicher pro"
+  },
+  "rankOf": {
+    "message": "Platz $1 von $2",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      },
+      "2": {
+        "content": "$2"
+      }
+    }
+  },
+  "sourceAmazon": {
+    "message": "Grundpreis lt. Amazon"
+  },
+  "unitTB": {
+    "message": "TB"
+  },
+  "unitGB": {
+    "message": "GB"
+  },
+  "unitLoad": {
+    "message": "WL"
+  },
+  "unitPortion": {
+    "message": "Stk."
+  },
+  "unitLiter": {
+    "message": "l"
+  },
+  "unitKilogram": {
+    "message": "kg"
+  },
+  "unitPiece": {
+    "message": "Stk."
+  },
+  "dimensionStorage": {
+    "message": "Speicher"
+  },
+  "dimensionLoad": {
+    "message": "Waschladung"
+  },
+  "dimensionPortion": {
+    "message": "Portion"
+  },
+  "dimensionVolume": {
+    "message": "Volumen"
+  },
+  "dimensionMass": {
+    "message": "Gewicht"
+  },
+  "dimensionCount": {
+    "message": "Anzahl"
+  },
+  "rankShort": {
+    "message": "Platz $1/$2",
+    "placeholders": {
+      "1": {
+        "content": "$1"
+      },
+      "2": {
+        "content": "$2"
+      }
+    }
+  }
+}
