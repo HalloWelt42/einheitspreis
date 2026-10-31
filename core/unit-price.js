@@ -124,7 +124,9 @@
     const config = Object.assign({}, DEFAULT_SETTINGS, settings);
     const price = offer.price;
     const amazon = parseAmazonUnitPrice(offer.amazonUnitPriceText);
-    const quantity = withPieces(parseQuantity(offer.text), piecesFromShopPrice(price, amazon));
+    const parsed = withPieces(parseQuantity(offer.text), piecesFromShopPrice(price, amazon));
+    // Offene Stückzahl ("4 bis 28 Stück") ohne Preis je Stück vom Shop: lieber keine Rechnung als eine falsche.
+    const quantity = parsed && parsed.countUncertain && parsed.items < 2 ? null : parsed;
 
     const computed = price && quantity
       ? result(quantity.dimension, price.amount / quantity.amount, price.currency, 'computed', quantity, config)

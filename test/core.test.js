@@ -57,7 +57,9 @@ const QUANTITY_CASES = [
   ['ROTHENBERGER Propan-Regler für Anwärmbrenner & Abflammgeräte | 3/8“ Anschluss | Für DE/AT 5- & 11kg-Flaschen', null, null],
   ['NOLA 3X Universalgas Druckgasdose 600 ml Butan Propan Gas Drehgewinde 338g 7/16" Universalgas Kartuschen', 'mass', 1.014],
   ['Gas Bullet ® Gaskartusche 227g passend für Gaskocher (MSF-1a) | Butan | Ideal für Camping/Outdoorküchen/Notfälle (28)', 'mass', 6.356],
-  ['Trockenfutter für Katzen 4 kg Huhn', 'mass', 4]
+  ['Trockenfutter für Katzen 4 kg Huhn', 'mass', 4],
+  ['campcooga 227 Gramm Gaskartuschen 4 bis 28 Stück Camping Butan EN417 MSF1a', 'mass', 0.227],
+  ['Bluecraft 6 Zylinder CO2 425g', 'mass', 2.55]
 ];
 
 for (const [title, dimension, amount] of QUANTITY_CASES) {
@@ -160,4 +162,11 @@ test('Shop-Grundpreis für ein einzelnes Stück einer Packung wird überstimmt (
   assert.ok(Math.abs(unitPrice.unitPrice - 27.99 / 6.356) < 0.01);
   const honest = computeUnitPrice({ ...offer, amazonUnitPriceText: '4,40 € / kg' }, {});
   assert.equal(honest.source, 'amazon');
+});
+
+test('Spanne von Stückzahlen: ohne Preis je Stück keine Rechnung (HELF-102)', () => {
+  const offer = { text: 'campcooga 227 Gramm Gaskartuschen 4 bis 28 Stück Camping Butan', price: { amount: 31.99, currency: 'EUR' } };
+  assert.equal(computeUnitPrice(offer, {}), null);
+  const withShop = computeUnitPrice({ ...offer, amazonUnitPriceText: '1,14 € / Stück' }, {});
+  assert.equal(withShop.quantity.items, 28);
 });

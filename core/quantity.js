@@ -78,6 +78,8 @@
   // und nicht bei Portionsware, deren Stückzahl dieselbe Menge zählt ("10 kg Spülmaschinentabs, 500 Stück").
   const PIECE_PACK_RE = /(?<!ca\.?\s*)(?:^|[\s(,–-])(\d{1,3})\s*(?:Stück|Stk\.?)(?!\p{L})/iu;
   const PIECE_PACK_DIMENSIONS = new Set(['storage', 'mass', 'volume']);
+  // Eine Spanne von Stückzahlen ("4 bis 28 Stück") nennt Varianten: welche der Preis meint, steht nicht da.
+  const PIECE_RANGE_RE = /\b\d{1,3}\s*(?:bis|-|–)\s*\d{1,3}\s*(?:Stück|Stk\.?)(?!\p{L})/iu;
   const PORTION_WORD_RE = /tabs|tabletten|kapseln|caps\b|pods|pads/i;
 
   // Packungsgröße irgendwo im Text.
@@ -92,8 +94,10 @@
     /(?:^|[\s(,])(\d{1,3})\s*[x×X]\s+(?=\p{L}{3})\p{L}*\p{Ll}/u,
     // Stückzahl in Klammern am Ende des Titels: "... Notfälle (28)"
     /\((\d{1,3})\)\s*$/,
-    // "28 Premium Gaskartuschen", "6 Zylinder": Behälter im Plural, davor höchstens ein Wort.
-    /\b(\d{1,3})\s*(?:[x×]\s*)?\s(?:[\p{L}\d-]+\s+)?(?:Gaskartuschen|Kartuschen|Zylinder|Patronen|Gasflaschen|Druckgasdosen)\b/iu,
+    // "28 Premium Gaskartuschen", "6 Zylinder": Behälter im Plural, davor höchstens ein Wort;
+    // nie eine Menge mit Einheit ("227 Gramm Gaskartuschen").
+    new RegExp('\\b(\\d{1,3})(?!\\s?(?:' + UNIT_ALTERNATION + ')(?![\\p{L}\\d]))\\s*(?:[x×]\\s*)?\\s(?:[\\p{L}\\d-]+\\s+)?' +
+      '(?:Gaskartuschen|Kartuschen|Zylinder|Patronen|Gasflaschen|Druckgasdosen)\\b', 'iu'),
     /\b(\d{1,3})er(?![\s-]*Jahre)\b/i
   ];
 
@@ -138,7 +142,7 @@
   }
 
   function findPiecePack(text, dimension) {
-    if (!PIECE_PACK_DIMENSIONS.has(dimension) || PORTION_WORD_RE.test(text)) return 1;
+    if (!PIECE_PACK_DIMENSIONS.has(dimension) || PORTION_WORD_RE.test(text) || PIECE_RANGE_RE.test(text)) return 1;
     const match = text.match(PIECE_PACK_RE);
     return match ? Number(match[1]) : 1;
   }
@@ -210,12 +214,15 @@
       const best = candidates.reduce((a, b) => (b.amount * b.multiplier > a.amount * a.multiplier ? b : a));
       const chosen = withNeighbourMultiplier(normalized, best, all);
       const pack = packFactor(normalized, chosen, candidates);
+      const items = chosen.multiplier * pack;
       return {
         dimension,
-        amount: chosen.amount * chosen.multiplier * pack,
+        amount: chosen.amount * items,
         perItem: chosen.amount,
-        items: chosen.multiplier * pack,
-        text: chosen.text
+        items,
+        text: chosen.text,
+        // Stückzahl offen: der Titel nennt eine Spanne von Varianten
+        countUncertain: items === 1 && PIECE_RANGE_RE.test(normalized)
       };
     }
     const pack = findPackSize(normalized);
