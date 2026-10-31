@@ -1,0 +1,593 @@
+{
+  "zweck": "Musterkatalog des Rechenkerns: jeder Fall, der einmal funktioniert hat oder einmal falsch war. node --test prüft alle; nichts davon darf kaputt gehen.",
+  "mengen": [
+    {
+      "titel": "WD Red Plus 6 TB NAS Interne Festplatte 3,5 Zoll - 5400 U/Min, SATA 6Gb/s",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 6
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Seagate IronWolf Pro 8TB, NAS Interne Festplatte HDD, 3.5 Zoll, 7200 U/Min, CMR, 256 MB Cache, SATA 6 GB/S",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 8
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Seagate 4TB IronWolf, 180TB/Jahr, 3 Jahre Garantie",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 4
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "16000 GB",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 16
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "24 TB",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 24
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Externe Festplatte,2TB 2,5Zoll USB 3.0 Backups HDD",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 2
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Acer Predator GM7 4TB M.2 NVMe SSD - Lesegeschwindigkeit bis zu 7400 MB/s",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 4
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Gehäuse für 3,5 Zoll Festplatten bis zu 24 TB",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "USB Stick 64GB 5er Pack, Speicherstick Slide Einziehbare 5 Stück)",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 0.32
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Intenso Basic Line 5x 32 GB USB-Sticks USB 2.0 Speichersticks, 5er Pack",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 0.16
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Gigastone M.2 SSD 2TB (2er-Pack) NVMe SSD Bis zu 7,300MB/s",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 4
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Disque Dur Externe Portable de 2,5 pouces 500Go",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 0.5
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Olio Extra Vergine Grezzo 1000 ml (3 x 1,0 l)",
+      "erwartet": {
+        "dimension": "volume",
+        "menge": 3
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Selters Mineralwasser, Classic 12 x 0.75 l (MEHRWEG)",
+      "erwartet": {
+        "dimension": "volume",
+        "menge": 9
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "ACQUA MORELLI Mineralwasser mit Kohlensäure - Sparkling, 12x0,5l PET",
+      "erwartet": {
+        "dimension": "volume",
+        "menge": 6
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "FELCE AZZURRA Flüssigwaschmittel 1.595 lt.",
+      "erwartet": {
+        "dimension": "volume",
+        "menge": 1.595
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Ecover Waschmittel Universal (5L/100 Waschladungen)",
+      "erwartet": {
+        "dimension": "load",
+        "menge": 100
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "SPEE Gel Universal (2x100 Waschladungen), Flüssigwaschmittel",
+      "erwartet": {
+        "dimension": "load",
+        "menge": 200
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Ariel Flüssigwaschmittel Color+, 80 Wäschen",
+      "erwartet": {
+        "dimension": "load",
+        "menge": 80
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Universal Waschpulver Pulverform 3x10 kg",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 30
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Dallmayr Espresso d'Oro Dark Roast 1.000g Ganze Bohne",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 1
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "by Amazon Kaffeebohnen, 2kg (2 Packungen mit 1kg)",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 2
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "FELIX Sensations Saucen, Sorten-Mix, 72er Pack (6 x 12 x 85g)",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 6.12
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Premium Olivenöl - extra hoher Polyphenol-Gehalt 950 mg/kg - 500 ml",
+      "erwartet": {
+        "dimension": "volume",
+        "menge": 0.5
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Somat Classic Power kompakte Spülmaschinentabs (172 Tabs)",
+      "erwartet": {
+        "dimension": "portion",
+        "menge": 172
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "POWREOWL AA Alkaline-Batterien (LR6), Ultra Power, 60 Stück",
+      "erwartet": {
+        "dimension": "count",
+        "menge": 60
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Varta 100 x Varta 04006 Batterien Alkaline, Mignon, AA",
+      "erwartet": {
+        "dimension": "count",
+        "menge": 100
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "Router mit 5G Modem",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-95"
+    },
+    {
+      "titel": "UGREEN NASync DXP4800 GT 4 Bay NAS (ohne HDD) | AMD Ryzen R2514, Dual 10GbE, 8GB DDR4 bis 64GB, 4K HDMI, 2 × M.2 NVMe-Steckplätze",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-101"
+    },
+    {
+      "titel": "Mini-PC mit 16 GB RAM und 512 GB SSD",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 0.512
+      },
+      "quelle": "HELF-101"
+    },
+    {
+      "titel": "Notebook, RAM: 8 GB, 1 TB SSD",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 1
+      },
+      "quelle": "HELF-101"
+    },
+    {
+      "titel": "Wattestäbchen 100 x Wattestäbchen Bambus",
+      "erwartet": {
+        "dimension": "count",
+        "menge": 100
+      },
+      "quelle": "HELF-101"
+    },
+    {
+      "titel": "Amazon Basics 256-GB-microSDXC-Karte mit Adapter",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 0.256
+      },
+      "quelle": "HELF-101"
+    },
+    {
+      "titel": "2 Stück Sodalivery CO2-Zylinder 425g/60l – Kohlensäure für Wassersprudler",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 0.85
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "Bluecraft 2x CO2 Zylinder 425g für SodaStream mit Füllung für bis zu 120l",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 0.85
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "EVOCAMP Butangas Kartuschen 500g, Schraubkartusche 899 ml",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 0.5
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "NOLA 12x 600ml (338g) Universalgas Gaskartuschen",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 4.056
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "ROTHENBERGER Propan-Regler für Anwärmbrenner für 5 kg und 11kg Flaschen",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "28 x MaXimum Gaskartuschen 227g MSF- 1a/ES-01 Butan",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 6.356
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "Roland Camping Butan Gaskartusche 227g – 28 Stück Gaskartuschen",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 6.356
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "MaXimum 28 Premium Gaskartuschen, 227g",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 6.356
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "AreTop USB Stick 32GB 5 Stück, 360° drehbar",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 0.16
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "ALL in ONE Premium Spülmaschinentabs, 10kg (ca. 500 Stück)",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 10
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "ROTHENBERGER Propan-Regler für Anwärmbrenner & Abflammgeräte | 3/8“ Anschluss | Für DE/AT 5- & 11kg-Flaschen",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "NOLA 3X Universalgas Druckgasdose 600 ml Butan Propan Gas Drehgewinde 338g 7/16\" Universalgas Kartuschen",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 1.014
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "Gas Bullet ® Gaskartusche 227g passend für Gaskocher (MSF-1a) | Butan | Ideal für Camping/Outdoorküchen/Notfälle (28)",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 6.356
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "Trockenfutter für Katzen 4 kg Huhn",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 4
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "campcooga 227 Gramm Gaskartuschen 4 bis 28 Stück Camping Butan EN417 MSF1a",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 0.227
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "Bluecraft 6 Zylinder CO2 425g",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 2.55
+      },
+      "quelle": "HELF-102"
+    },
+    {
+      "titel": "IMEX Gaskartuschen 227g MSF-1a – Hochwertiges Butan-Gas für Campingkocher & mehr (28 x)",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 6.356
+      },
+      "quelle": "HELF-103"
+    }
+  ],
+  "preise": [
+    {
+      "titel": "24 TB",
+      "preis": "635,86€",
+      "erwartet": {
+        "dimension": "storage",
+        "einheitspreis": 26.49,
+        "quelle": "computed"
+      },
+      "quelle": "HELF-95",
+      "hinweis": "Festplatte in TB"
+    },
+    {
+      "titel": "Olivenöl 1L",
+      "preis": "21,95 €",
+      "grundpreis": "20,00 € / l",
+      "erwartet": {
+        "dimension": "volume",
+        "einheitspreis": 20,
+        "quelle": "amazon"
+      },
+      "quelle": "HELF-95",
+      "hinweis": "Grundpreis des Shops hat Vorrang vor Volumen, beide nah beieinander"
+    },
+    {
+      "titel": "Kaffee",
+      "preis": "5 €",
+      "grundpreis": "1,23 € / 100 g",
+      "erwartet": {
+        "dimension": "mass",
+        "einheitspreis": 12.3,
+        "quelle": "amazon"
+      },
+      "quelle": "HELF-95",
+      "hinweis": "\"100 g\" wird auf kg umgerechnet"
+    },
+    {
+      "titel": "Olivenöl 3 l",
+      "preis": "59,49 €",
+      "grundpreis": "59,49 € / Stück",
+      "erwartet": {
+        "dimension": "volume",
+        "einheitspreis": 19.83,
+        "quelle": "computed"
+      },
+      "quelle": "HELF-95",
+      "hinweis": "\"€/Stück\" des Shops weicht einer echten Menge"
+    },
+    {
+      "titel": "Micro SD Karte 16GB 5er Pack",
+      "preis": "25,49 €",
+      "grundpreis": "5,10 € / Stück",
+      "erwartet": {
+        "dimension": "storage",
+        "einheitspreis": 318.63,
+        "quelle": "computed"
+      },
+      "quelle": "HELF-95",
+      "hinweis": "Speicher schlägt Stückpreis"
+    },
+    {
+      "titel": "Gazcamp GC227 Gaskartusche 227g Butangas",
+      "preis": "30,99 €",
+      "grundpreis": "1,11 € / Stück",
+      "erwartet": {
+        "dimension": "mass",
+        "einheitspreis": 4.88,
+        "quelle": "computed",
+        "stueck": 28
+      },
+      "quelle": "HELF-102",
+      "hinweis": "Stückzahl aus Shop-Preis je Stück: 30,99 / 1,11 = 28"
+    },
+    {
+      "titel": "Gazcamp GC227 Gaskartusche 227g Butangas",
+      "preis": "30,99 €",
+      "grundpreis": "1,30 € / Stück",
+      "erwartet": {
+        "dimension": "mass",
+        "einheitspreis": 136.52,
+        "quelle": "computed",
+        "stueck": 1
+      },
+      "quelle": "HELF-102",
+      "hinweis": "keine glatte Teilung (Cent-Rundung): keine Stückzahl ableiten"
+    },
+    {
+      "titel": "campcooga 227 Gramm Gaskartuschen 4 bis 28 Stück Camping Butan EN417 MSF1a",
+      "preis": "31,99 €",
+      "erwartet": {
+        "auslassen": true
+      },
+      "quelle": "HELF-102",
+      "hinweis": "Spanne von Varianten ohne Grundpreis: nicht raten (zeigte 227 x 227 Gramm, Platz 1)"
+    },
+    {
+      "titel": "campcooga 227 Gramm Gaskartuschen 4 bis 28 Stück Camping Butan EN417 MSF1a",
+      "preis": "31,99 €",
+      "grundpreis": "5,03 € / kg",
+      "erwartet": {
+        "dimension": "mass",
+        "einheitspreis": 5.03,
+        "quelle": "amazon"
+      },
+      "quelle": "HELF-102",
+      "hinweis": "Spanne mit Grundpreis: Shop gilt"
+    },
+    {
+      "titel": "NAYVER Propan-Butan Mix Gaskartusche MSF-1A, 227g | Wintertauglich (28)",
+      "preis": "24,99 €",
+      "grundpreis": "110,09 € / kg",
+      "erwartet": {
+        "auslassen": true
+      },
+      "quelle": "HELF-103",
+      "hinweis": "Widerspruch: Shop rechnet 1 Kartusche, Titel 28, Bild 12"
+    },
+    {
+      "titel": "NAYVER Propan-Butan Mix Gaskartusche MSF-1A, 227g",
+      "preis": "24,99 €",
+      "erwartet": {
+        "dimension": "mass",
+        "einheitspreis": 110.09,
+        "quelle": "computed"
+      },
+      "quelle": "HELF-103",
+      "hinweis": "ohne Stückzahl im Text: Einheitspreis entsteht, fällt aber als Ausreißer der Gruppe heraus (siehe ausreisser)"
+    },
+    {
+      "titel": "Gas Bullet ® Gaskartusche 227g passend für Gaskocher (MSF-1a) | Butan | Ideal für Camping/Outdoorküchen/Notfälle (28)",
+      "preis": "27,99 €",
+      "erwartet": {
+        "dimension": "mass",
+        "einheitspreis": 4.4,
+        "quelle": "computed",
+        "stueck": 28
+      },
+      "quelle": "HELF-102",
+      "hinweis": "Titelende \"(28)\""
+    },
+    {
+      "titel": "IMEX Gaskartuschen 227g MSF-1a – Hochwertiges Butan-Gas für Campingkocher & mehr (28 x)",
+      "preis": "44,90 €",
+      "erwartet": {
+        "dimension": "mass",
+        "einheitspreis": 7.06,
+        "quelle": "computed",
+        "stueck": 28
+      },
+      "quelle": "HELF-103",
+      "hinweis": "Titelende \"(28 x)\", zeigte 197,80 €/kg"
+    },
+    {
+      "titel": "Der-Franz Espresso Kaffee, ganze Bohne, 4 x 1000 g",
+      "preis": "73,69 €",
+      "grundpreis": "73,69 € / kg",
+      "erwartet": {
+        "auslassen": true
+      },
+      "quelle": "HELF-103",
+      "hinweis": "Widerspruch Shop gegen Text um Faktor 4"
+    }
+  ],
+  "ausreisser": [
+    {
+      "gruppe": "Gaskartuschen €/kg",
+      "werte": [
+        4.4,
+        4.7,
+        4.9,
+        5,
+        6.6,
+        7.7,
+        132.03,
+        70
+      ],
+      "erwartetRaus": [
+        132.03
+      ],
+      "quelle": "HELF-103",
+      "hinweis": "STAHLMANN \"227g\" ohne Stückzahl 28-fach über Median; Kleinstflasche-artig 70 bleibt"
+    },
+    {
+      "gruppe": "kleine Gruppe",
+      "werte": [
+        4,
+        132
+      ],
+      "erwartetRaus": [],
+      "quelle": "HELF-103",
+      "hinweis": "unter 5 Angeboten kein Ausreißer-Urteil"
+    }
+  ]
+}

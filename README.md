@@ -65,9 +65,15 @@ Geprüft ist die Erkennung an 910 echten Suchtreffern aus Speicher, Lebensmittel
 ```bash
 npm install
 npm run vendor   # Schrift und Icons nach vendor/ übernehmen
-npm test         # Rechenkern gegen echte Suchtreffer (test/fixtures)
+npm test         # Rechenkern: Musterkatalog und Schnappschuss der echten Suchtreffer
+npm run snapshot # Schnappschuss nach einer bewusst geprüften Änderung übernehmen
 npm run zip      # Paket nach store/
 ```
+
+Was einmal funktioniert hat, darf nicht kaputt gehen:
+
+- `test/fixtures/muster.json` sammelt jeden Fall, der einmal richtig erkannt wurde oder einmal falsch war, mit erwartetem Ergebnis und Herkunft. Jeder neue Fund kommt dort hinein.
+- `test/fixtures/amazon-ergebnisse.json` hält das Ergebnis jedes der 910 echten Angebote fest. Weicht eines ab, schlägt `npm test` fehl; eine gewollte Verbesserung wird mit `npm run snapshot` übernommen und im Commit begründet.
 
 Vorführseite: den Ordner über einen lokalen Server ausliefern (etwa `python3 -m http.server`) und `test/ansicht/kaufzon-produkt.html` oder `test/ansicht/kaufzon-suche.html?liste=offen` öffnen.
 
