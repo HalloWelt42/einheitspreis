@@ -8,6 +8,7 @@ Browser-Erweiterung für den Online-Shop: zeigt an jedem Angebot den Preis pro E
 - **Waschmittel**: Preis pro Waschladung
 - **Tabs, Kapseln, Pods**: Preis pro Stück
 - **Lebensmittel und Flüssiges**: Preis pro Liter oder Kilogramm, bevorzugt der Grundpreis, den der Shop selbst angibt
+- **Empfehlungslisten**: auch auf Seiten wie "Weiter einkaufen" mit Empfehlungskacheln
 - **Vergleichsliste**: schwebender Knopf unten rechts, günstigster Einheitspreis zuerst, Klick springt zum Angebot
 
 Jedes Abzeichen nennt die erkannte Menge (etwa "5 x 32 GB"), damit jede Zahl nachprüfbar ist. Farben: grün = günstigster, hellgrün bis 15 % teurer, gelb bis 40 %, rot darüber, blau = einziges Angebot dieser Einheit.
