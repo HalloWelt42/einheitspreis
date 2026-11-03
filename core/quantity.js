@@ -11,7 +11,7 @@
 
   // Reihenfolge = Vorrang, wenn ein Text mehrere Dimensionen nennt. Gewicht vor Volumen: steht beides da, ist das
   // Volumen meist Ausbeute oder Gefäß ("CO2-Zylinder 425g/60l", "Butangas 500g, 899 ml", "14kg Gasflasche 24,4l").
-  const DIMENSION_ORDER = ['storage', 'load', 'portion', 'mass', 'volume', 'count'];
+  const DIMENSION_ORDER = ['storage', 'load', 'portion', 'area', 'mass', 'volume', 'count'];
 
   // Einheit -> Dimension und Faktor zur Basiseinheit.
   // anyCase: auch "4tb", "5KG"; einzelne Buchstaben wie "g" nur exakt ("5G" ist kein Gramm).
@@ -28,6 +28,8 @@
     { pattern: 'dl', dimension: 'volume', factor: 1e-1, anyCase: false },
     { pattern: 'l|L', dimension: 'volume', factor: 1, anyCase: false },
     { pattern: 'Liter|Litre|Ltr\\.?|lt\\.?', dimension: 'volume', factor: 1, anyCase: true },
+    { pattern: 'm²|m2|qm|Quadratmeter', dimension: 'area', factor: 1, anyCase: false },
+    { pattern: 'cm²|cm2', dimension: 'area', factor: 1e-4, anyCase: false },
     { pattern: 'kg|Kilogramm|Kilo', dimension: 'mass', factor: 1, anyCase: true },
     { pattern: 'g|gr\\.?', dimension: 'mass', factor: 1e-3, anyCase: false },
     { pattern: 'Gramm', dimension: 'mass', factor: 1e-3, anyCase: true },
@@ -78,6 +80,20 @@
   ];
   const STORAGE_CONTEXT_RE = /SSD|HDD|NVMe|M\.2|Festplatte|Speicher|micro\s?SD|SD[\s-]?Karte|USB[\s-]?Stick|Flash/i;
 
+  // Fläche aus zwei Längen in Metern ("10m x 0,5m x 3mm", "10 x 0,5 m"). Maße in cm ("Tisch 120 x 60 cm") sind
+  // meist Möbel oder Geräte, kein Flächenware: dort keine Fläche.
+  const AREA_FROM_LENGTHS_RE = /(?<![\d.,])(\d+(?:[.,]\d+)?)\s?(?:m|Meter)?\s*[x×]\s*(\d+(?:[.,]\d+)?)\s?(?:m|Meter)(?![\p{L}\d²])/giu;
+
+  // Gewicht als Traglast oder Nutzergewicht ist kein Inhalt ("200 kg belastbar", "Tragkraft 150 kg").
+  // Ebenso Bauteile eines Geräts ("15KG Schwungrad", "Schwungmasse 8 kg").
+  const CAPACITY_AFTER_RE = /^\s*(?:belastbar|Belastbarkeit|Tragkraft|Traglast|Nutzergewicht|Benutzergewicht|Maximalgewicht|max\.?\s*Belastung|Zuladung|Schwungrad|Schwungmasse)/i;
+  const CAPACITY_BEFORE_RE = /(?:Belastbarkeit|belastbar(?:\s+bis)?|Tragkraft|Traglast|Nutzergewicht|Benutzergewicht|Maximalgewicht|Zuladung|Schwungrad|Schwungmasse)\s*:?\s*(?:bis\s*(?:zu\s*)?)?$/i;
+
+  // Speicherplatz zählt nur bei Speicherprodukten, nicht im Gerät ("Kindle 16 GB", "Mini-PC mit 512 GB SSD"):
+  // ein Speicherwort muss vorkommen, und kein Gerät darf davor stehen ("SSD ... für Laptop" bleibt Speicher).
+  const STORAGE_PRODUCT_RE = /SSD|HDD|NVMe|M\.2|Festplatte|Speicherkarte|micro\s?SD|SD[\s-]?Karte|SDXC|SDHC|CompactFlash|CF[\s-]?Karte|USB[\s-]?Stick|Speicherstick|Flash|Laufwerk|Drive|Disk|Disque|(?<!Arbeits)[Ss]peicher/i;
+  const DEVICE_RE = /\b(?:Kindle|E-?Reader|eBook-?Reader|Smartphone|Handy|Tablet|iPad|iPhone|Laptop|Notebook|Chromebook|Mini-?PC|Desktop-?PC|Spielkonsole|Konsole|Kamera|Smartwatch|Router)\b/i;
+
   // Arbeitsspeicher eines Geräts ist kein Speicherplatz ("8GB DDR4", "16 GB RAM", "RAM: 8 GB").
   const MEMORY_AFTER_RE = /^\s*(?:(?:LP)?DDR\d|S?D?RAM\b|Arbeitsspeicher|Hauptspeicher)/i;
   const MEMORY_BEFORE_RE = /(?:\bRAM|Arbeitsspeicher|Hauptspeicher)\s*:?\s*$/i;
@@ -88,6 +104,11 @@
   const PIECE_PACK_DIMENSIONS = new Set(['storage', 'mass', 'volume']);
   // Eine Spanne von Stückzahlen ("4 bis 28 Stück") nennt Varianten: welche der Preis meint, steht nicht da.
   const PIECE_RANGE_RE = /\b\d{1,3}\s*(?:bis|-|–)\s*\d{1,3}\s*(?:Stück|Stk\.?)(?!\p{L})/iu;
+  // Feine Regeln, was "N Stück" bei Gewicht oder Volumen zählt (HELF-137):
+  // Behälter mit Menge je Stück ("Gaskartusche 227g – 28 Stück") -> Packungen;
+  // Süßwaren ("Fruchtgummi 150 Stück 1200g") -> Inhalt; sonst offen, nur der Shop kann es bestätigen.
+  const PIECES_ARE_PACKS_RE = /Kartusche|Zylinder|Patrone|Druckgasdose/i;
+  const PIECES_ARE_CONTENT_RE = /Fruchtgummi|Weingummi|Gummibär|Gummibärchen|Süßwaren|Bonbon|Praline|Keks|Lakritz|Naschdose|Süßigkeit/i;
   const PORTION_WORD_RE = /tabs|tabletten|kapseln|caps\b|pods|pads/i;
 
   // Packungsgröße irgendwo im Text.
@@ -152,6 +173,7 @@
 
   function findPiecePack(text, dimension) {
     if (!PIECE_PACK_DIMENSIONS.has(dimension) || PORTION_WORD_RE.test(text) || PIECE_RANGE_RE.test(text)) return 1;
+    if (dimension !== 'storage' && PIECES_ARE_CONTENT_RE.test(text)) return 1;
     const match = text.match(PIECE_PACK_RE);
     return match ? Number(match[1]) : 1;
   }
@@ -169,7 +191,9 @@
       const prefix = text.slice(Math.max(0, match.index - 24), match.index);
       if (LIMIT_CONTEXT_RE.test(prefix)) continue;
       if (FOR_CONTEXT_DIMENSIONS.has(unit.dimension) && FOR_CONTEXT_RE.test(prefix)) continue;
-      if (unit.dimension === 'storage' && isMemory(prefix, text.slice(match.index + match[0].length))) continue;
+      const rest = text.slice(match.index + match[0].length);
+      if (unit.dimension === 'storage' && isMemory(prefix, rest)) continue;
+      if (unit.dimension === 'mass' && (CAPACITY_BEFORE_RE.test(prefix) || CAPACITY_AFTER_RE.test(rest.slice(0, 30)))) continue;
       const value = parseNumber(match[1], COUNTED_DIMENSIONS.has(unit.dimension) ? 0 : unit.factor);
       if (!Number.isFinite(value) || value <= 0) continue;
       const multiplierMatch = prefix.match(MULTIPLIER_BEFORE_RE);
@@ -183,7 +207,24 @@
         end: match.index + match[0].length
       });
     }
-    return found.concat(findShortStorage(text));
+    return found.concat(findShortStorage(text), findAreas(text));
+  }
+
+  function findAreas(text) {
+    const found = [];
+    for (const match of text.matchAll(AREA_FROM_LENGTHS_RE)) {
+      const amount = parseNumber(match[1], 1) * parseNumber(match[2], 1);
+      if (!(amount > 0)) continue;
+      found.push({ dimension: 'area', amount, multiplier: 1, text: match[0].trim(), start: match.index, end: match.index + match[0].length });
+    }
+    return found;
+  }
+
+  function isStorageProduct(text) {
+    const product = text.search(STORAGE_PRODUCT_RE);
+    if (product < 0) return false;
+    const device = text.search(DEVICE_RE);
+    return device < 0 || device > product;
   }
 
   function findShortStorage(text) {
@@ -234,10 +275,15 @@
    * "1000 ml (3 x 1,0 l)" ergibt 3 l.
    * Eine Packungsgröße ("3er Pack") wirkt nur, wenn kein "N x" dasteht.
    */
-  function parseQuantity(text) {
+  /**
+   * context: Text, der sagt, was für ein Produkt es ist, wenn text nur ein Ausschnitt ist
+   * (Variantenkachel "6 TB" mit dem Produkttitel als Zusammenhang).
+   */
+  function parseQuantity(text, context) {
     if (!text) return null;
     const normalized = text.replace(/ /g, ' ');
-    const all = findQuantities(normalized);
+    const storageProduct = isStorageProduct(context ? context.replace(/ /g, ' ') : normalized);
+    const all = findQuantities(normalized).filter((q) => q.dimension !== 'storage' || storageProduct);
     for (const dimension of DIMENSION_ORDER) {
       const candidates = all.filter((q) => q.dimension === dimension);
       if (candidates.length === 0) continue;
@@ -245,6 +291,7 @@
       const chosen = withNeighbourMultiplier(normalized, best, all);
       const pack = packFactor(normalized, chosen, candidates);
       const items = chosen.multiplier * pack;
+      const piecePack = pack > 1 && pack === findPiecePack(normalized, dimension) && findPackSize(normalized) === 1;
       return {
         dimension,
         amount: chosen.amount * items,
@@ -252,7 +299,10 @@
         items,
         text: chosen.text,
         // Stückzahl offen: der Titel nennt eine Spanne von Varianten
-        countUncertain: items === 1 && PIECE_RANGE_RE.test(normalized)
+        countUncertain: items === 1 && PIECE_RANGE_RE.test(normalized),
+        // "150 Stück 1200g": zählt "N Stück" Packungen oder den Inhalt? Bei Gewicht und Volumen offen,
+        // nur der Shop kann es bestätigen (Speicher dagegen: "USB-Stick 32GB 5 Stück" sind immer 5 Sticks).
+        pieceCountUncertain: piecePack && dimension !== 'storage' && !PIECES_ARE_PACKS_RE.test(normalized)
       };
     }
     const pack = findPackSize(normalized);

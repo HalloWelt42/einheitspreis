@@ -18,7 +18,7 @@
       "quelle": "HELF-95"
     },
     {
-      "titel": "Seagate 4TB IronWolf, 180TB/Jahr, 3 Jahre Garantie",
+      "titel": "Seagate 4TB IronWolf Interne NAS-Festplatte, 180TB/Jahr, 3 Jahre Garantie",
       "erwartet": {
         "dimension": "storage",
         "menge": 4
@@ -31,7 +31,9 @@
         "dimension": "storage",
         "menge": 16
       },
-      "quelle": "HELF-95"
+      "quelle": "HELF-95",
+      "kontext": "WD Red Pro NAS Interne Festplatte",
+      "hinweis": "Variantenkachel: nur die Größe, Speicherbezug aus dem Produkttitel"
     },
     {
       "titel": "24 TB",
@@ -39,7 +41,9 @@
         "dimension": "storage",
         "menge": 24
       },
-      "quelle": "HELF-95"
+      "quelle": "HELF-95",
+      "kontext": "WD Red Pro NAS Interne Festplatte",
+      "hinweis": "Variantenkachel: nur die Größe, Speicherbezug aus dem Produkttitel"
     },
     {
       "titel": "Externe Festplatte,2TB 2,5Zoll USB 3.0 Backups HDD",
@@ -233,18 +237,18 @@
     {
       "titel": "Mini-PC mit 16 GB RAM und 512 GB SSD",
       "erwartet": {
-        "dimension": "storage",
-        "menge": 0.512
+        "keineMenge": true
       },
-      "quelle": "HELF-101"
+      "quelle": "HELF-139",
+      "hinweis": "Speicher im Gerät, kein Speicherprodukt (vorher HELF-101: Speicher erkannt)"
     },
     {
       "titel": "Notebook, RAM: 8 GB, 1 TB SSD",
       "erwartet": {
-        "dimension": "storage",
-        "menge": 1
+        "keineMenge": true
       },
-      "quelle": "HELF-101"
+      "quelle": "HELF-139",
+      "hinweis": "Speicher im Gerät, kein Speicherprodukt (vorher HELF-101: Speicher erkannt)"
     },
     {
       "titel": "Wattestäbchen 100 x Wattestäbchen Bambus",
@@ -456,6 +460,125 @@
       },
       "quelle": "HELF-106",
       "hinweis": "1667x ist Geschwindigkeitsklasse"
+    },
+    {
+      "titel": "Vampire Fruchtgummi mit Lakritz, Runddose 150 Stück 1200g",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 1.2
+      },
+      "quelle": "HELF-137",
+      "hinweis": "Süßwaren-Regel: \"150 Stück\" ist Inhalt"
+    },
+    {
+      "titel": "Roland Camping Butan Gaskartusche 227g – 28 Stück Gaskartuschen für Schweißbrenner",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 6.356
+      },
+      "quelle": "HELF-137",
+      "hinweis": "Behälter Kartusche: \"28 Stück\" sind Packungen"
+    },
+    {
+      "titel": "Millto Heizkörper Reflexionsfolie 10m x 0,5m x 3mm | Wandisolierung Reflexionsplatte",
+      "erwartet": {
+        "dimension": "area",
+        "menge": 5
+      },
+      "quelle": "HELF-138",
+      "hinweis": "Fläche aus zwei Längen in Metern, Dicke bleibt außen vor"
+    },
+    {
+      "titel": "Bodenschutzmatte Teppich 5 m²",
+      "erwartet": {
+        "dimension": "area",
+        "menge": 5
+      },
+      "quelle": "HELF-138",
+      "hinweis": "Fläche direkt in m²"
+    },
+    {
+      "titel": "Schreibtisch 120 x 60 cm, höhenverstellbar",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-138",
+      "hinweis": "Maße in cm: Möbel, keine Flächenware"
+    },
+    {
+      "titel": "Amazon Kindle 16 GB (Neueste Generation), jetzt dünner, leichter und schneller, 6-Zoll-Display, Ohne Werbung",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-139",
+      "hinweis": "Speicher im Gerät (zeigte 10.936,88 €/TB)"
+    },
+    {
+      "titel": "Samsung Galaxy A16 Smartphone 128 GB Speicher",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-139",
+      "hinweis": "Gerät vor dem Speicherwort"
+    },
+    {
+      "titel": "Crucial P510 SSD 1TB M.2 NVMe PCIe 5.0, für Laptop und Desktop PC",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 1
+      },
+      "quelle": "HELF-139",
+      "hinweis": "Speicherprodukt, Gerät nur als Verwendung danach"
+    },
+    {
+      "titel": "WD BWLG0200HBK-EESN Elements Desktop-Speicher 20 TB (USB 3.0-kompatibel)",
+      "erwartet": {
+        "dimension": "storage",
+        "menge": 20
+      },
+      "quelle": "HELF-139",
+      "hinweis": "\"Desktop-Speicher\" ist Speicherprodukt"
+    },
+    {
+      "titel": "NEU Tretmann Heimtrainer Fahrrad 200 kg belastbar + APP - extra bequem",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-140",
+      "hinweis": "Traglast ist kein Inhalt (zeigte 1,30 €/kg)"
+    },
+    {
+      "titel": "Hantelbank Tragkraft 300 kg, klappbar",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-140",
+      "hinweis": "Traglast"
+    },
+    {
+      "titel": "Hantelscheiben Set 2 x 10 kg Gusseisen",
+      "erwartet": {
+        "dimension": "mass",
+        "menge": 20
+      },
+      "quelle": "HELF-140",
+      "hinweis": "echtes Gewicht bleibt"
+    },
+    {
+      "titel": "Heimtrainer Fahrrad mit APP, 0-100% Magnetwiderstand Ergometer, 15KG Schwungrad, Bis 160KG, Hometrainer",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-140",
+      "hinweis": "Schwungrad-Gewicht und Nutzergewicht sind kein Inhalt"
+    },
+    {
+      "titel": "MERACH S36 Heimtrainer Fahrrad - 8KG Schwungrad, Magnetwiderstand < 25 dB",
+      "erwartet": {
+        "keineMenge": true
+      },
+      "quelle": "HELF-140",
+      "hinweis": "Schwungrad"
     }
   ],
   "preise": [
@@ -468,7 +591,8 @@
         "quelle": "computed"
       },
       "quelle": "HELF-95",
-      "hinweis": "Festplatte in TB"
+      "hinweis": "Festplatte in TB Variantenkachel: nur die Größe, Speicherbezug aus dem Produkttitel",
+      "kontext": "WD Red Pro NAS Interne Festplatte"
     },
     {
       "titel": "Olivenöl 1L",
@@ -628,6 +752,89 @@
       },
       "quelle": "HELF-105",
       "hinweis": "Karte ohne Preis ('Optionen anzeigen'): kein Einheitspreis"
+    },
+    {
+      "titel": "Haribo Vampis Runddose 150 Stück 1200g",
+      "preis": "13,12 €",
+      "erwartet": {
+        "dimension": "mass",
+        "einheitspreis": 10.93,
+        "quelle": "amazon"
+      },
+      "quelle": "HELF-137",
+      "hinweis": "Shop-Grundpreis (im Karussell als reiner Text) passt zu 1200g",
+      "grundpreis": "10,93 € / kg"
+    },
+    {
+      "titel": "Duftkerzen Set 400g 6 Stück",
+      "preis": "24,00 €",
+      "erwartet": {
+        "auslassen": true
+      },
+      "quelle": "HELF-137",
+      "hinweis": "\"N Stück\" ohne passende feine Regel und ohne Shop: offen, auslassen"
+    },
+    {
+      "titel": "Duftkerzen Set 400g 6 Stück",
+      "preis": "24,00 €",
+      "erwartet": {
+        "dimension": "mass",
+        "einheitspreis": 60,
+        "quelle": "amazon"
+      },
+      "quelle": "HELF-137",
+      "hinweis": "Shop bestätigt: 400g gesamt",
+      "grundpreis": "60,00 € / kg"
+    },
+    {
+      "titel": "Duftkerzen Set 400g 6 Stück",
+      "preis": "24,00 €",
+      "erwartet": {
+        "dimension": "mass",
+        "einheitspreis": 10,
+        "quelle": "amazon"
+      },
+      "quelle": "HELF-137",
+      "hinweis": "Shop bestätigt: 6 x 400g",
+      "grundpreis": "10,00 € / kg"
+    },
+    {
+      "titel": "Millto Heizkörper Reflexionsfolie 10m x 0,5m x 3mm | Wandisolierung",
+      "preis": "19,99 €",
+      "erwartet": {
+        "dimension": "area",
+        "einheitspreis": 4.0,
+        "quelle": "computed"
+      },
+      "quelle": "HELF-138",
+      "hinweis": "Flächenpreis €/m²"
+    },
+    {
+      "titel": "Amazon Kindle 16 GB (Neueste Generation), 6-Zoll-Display",
+      "preis": "174,99 €",
+      "erwartet": {
+        "auslassen": true
+      },
+      "quelle": "HELF-139",
+      "hinweis": "Gerät, kein €/TB"
+    },
+    {
+      "titel": "NEU Tretmann Heimtrainer Fahrrad 200 kg belastbar + APP",
+      "preis": "259,99 €",
+      "erwartet": {
+        "auslassen": true
+      },
+      "quelle": "HELF-140",
+      "hinweis": "Sportgerät, kein Kilopreis"
+    },
+    {
+      "titel": "Haribo Vampis Runddose 150 Stück 1200g",
+      "preis": "13,12 €",
+      "erwartet": {
+        "auslassen": true
+      },
+      "quelle": "HELF-137",
+      "hinweis": "ohne Shop-Grundpreis und ohne passende Regel: offen, auslassen (zeigte 150 x 1200g)"
     }
   ],
   "ausreisser": [

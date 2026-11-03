@@ -13,7 +13,7 @@ const close = (actual, expected) => Math.abs(actual - expected) <= Math.max(1e-9
 // Musterkatalog: jeder Fall, der einmal funktioniert hat oder einmal falsch war (HELF-104)
 for (const muster of MUSTER.mengen) {
   test('Menge [' + muster.quelle + ']: ' + muster.titel, () => {
-    const q = parseQuantity(muster.titel);
+    const q = parseQuantity(muster.titel, muster.kontext);
     if (muster.erwartet.keineMenge) {
       assert.equal(q, null);
       return;
@@ -25,7 +25,7 @@ for (const muster of MUSTER.mengen) {
 
 for (const muster of MUSTER.preise) {
   test('Preis [' + muster.quelle + ']: ' + muster.titel + (muster.grundpreis ? ' | Shop ' + muster.grundpreis : ''), () => {
-    const r = computeUnitPrice({ text: muster.titel, price: parseMoney(muster.preis), amazonUnitPriceText: muster.grundpreis || null }, {});
+    const r = computeUnitPrice({ text: muster.titel, context: muster.kontext, price: parseMoney(muster.preis), amazonUnitPriceText: muster.grundpreis || null }, {});
     if (muster.erwartet.auslassen) {
       assert.equal(r, null, muster.hinweis);
       return;

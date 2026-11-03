@@ -21,6 +21,7 @@
     storage: { TB: 1, GB: 1e-3 },
     load: { load: 1 },
     portion: { portion: 1 },
+    area: { m2: 1 },
     volume: { l: 1 },
     mass: { kg: 1 },
     count: { piece: 1 }
@@ -35,12 +36,28 @@
   // "Gaskartusche 227g", 30,99 € bei 1,11 €/Stück sind 28 Kartuschen. Zugelassen ist nur die Rundung
   // des Shops auf ganze Cent: je Stück höchstens ein halber Cent, dazu ein Cent für den Gesamtpreis.
   const CENT_ROUNDING = 0.005;
+  // Eigene Rechnung und Shop-Grundpreis gelten als übereinstimmend bis 5 % Abstand (Rundung, Angebotspreis).
+  const SHOP_AGREEMENT = 0.05;
 
   function piecesFromShopPrice(price, amazon) {
     if (!price || !amazon || amazon.dimension !== 'count' || !(amazon.pricePerBase > 0)) return 1;
     const pieces = Math.round(price.amount / amazon.pricePerBase);
     const deviation = Math.abs(price.amount - pieces * amazon.pricePerBase);
     return pieces >= 2 && deviation <= pieces * CENT_ROUNDING + 2 * CENT_ROUNDING ? pieces : 1;
+  }
+
+  // "N Stück" bei Gewicht oder Volumen ohne passende feine Regel: gilt nur, wenn der Shop die Packung bestätigt
+  // (Preis je Stück ergibt dieselbe Stückzahl, oder sein Grundpreis passt zur Packung). Passt sein Grundpreis zum
+  // einzelnen Stück, zählt dieses; ohne Bestätigung keine Rechnung.
+  function resolvePieces(quantity, price, amazon) {
+    if (!quantity || !quantity.pieceCountUncertain) return quantity;
+    if (!price || !amazon) return null;
+    if (amazon.dimension === 'count') return piecesFromShopPrice(price, amazon) === quantity.items ? quantity : null;
+    if (amazon.dimension !== quantity.dimension) return null;
+    const single = Object.assign({}, quantity, { amount: quantity.perItem, items: 1 });
+    const agrees = (q) => Math.abs(price.amount / q.amount / amazon.pricePerBase - 1) <= SHOP_AGREEMENT;
+    if (agrees(quantity)) return quantity;
+    return agrees(single) ? single : null;
   }
 
   function withPieces(quantity, pieces) {
@@ -119,16 +136,16 @@
   }
 
   /**
-   * offer: { text, price: { amount, currency }, amazonUnitPriceText? }
+   * offer: { text, context?, price: { amount, currency }, amazonUnitPriceText? }
    * Liefert null, wenn sich kein Einheitspreis sicher bestimmen lässt.
    */
   function computeUnitPrice(offer, settings) {
     const config = Object.assign({}, DEFAULT_SETTINGS, settings);
     const price = offer.price;
     const amazon = parseAmazonUnitPrice(offer.amazonUnitPriceText);
-    const parsed = withPieces(parseQuantity(offer.text), piecesFromShopPrice(price, amazon));
+    const parsed = withPieces(parseQuantity(offer.text, offer.context), piecesFromShopPrice(price, amazon));
     // Offene Stückzahl ("4 bis 28 Stück") ohne Preis je Stück vom Shop: lieber keine Rechnung als eine falsche.
-    const quantity = parsed && parsed.countUncertain && parsed.items < 2 ? null : parsed;
+    const quantity = parsed && parsed.countUncertain && parsed.items < 2 ? null : resolvePieces(parsed, price, amazon);
 
     const computed = price && quantity
       ? result(quantity.dimension, price.amount / quantity.amount, price.currency, 'computed', quantity, config)

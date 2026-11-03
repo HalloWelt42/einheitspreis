@@ -49,6 +49,9 @@
   "unitKilogram": {
     "message": "kg"
   },
+  "unitSquareMeter": {
+    "message": "m²"
+  },
   "unitPiece": {
     "message": "pc"
   },
@@ -60,6 +63,9 @@
   },
   "dimensionPortion": {
     "message": "Portion"
+  },
+  "dimensionArea": {
+    "message": "Area"
   },
   "dimensionVolume": {
     "message": "Volume"

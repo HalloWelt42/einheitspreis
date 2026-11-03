@@ -67,7 +67,20 @@
       const amount = (offscreen && offscreen.textContent.trim()) || priceEl.textContent.trim();
       return amount + ' / ' + unit[1].trim();
     }
-    return null;
+    return readPlainUnitPrice(scope);
+  }
+
+  // Manche Kacheln (Empfehlungskarussells) schreiben den Grundpreis als reinen Text: "13,12 € (10,93 €/kg)".
+  const PLAIN_UNIT_PRICE_RE = /\(\s*((?:\d{1,3}(?:\.\d{3})*|\d+),\d{2}\s*€|€\s*\d+(?:[.,]\d{2}))\s*\/\s*([^()]{1,20}?)\s*\)/;
+
+  function readPlainUnitPrice(scope) {
+    const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => (node.parentElement.closest('.ep-badge, #einheitspreis-panel-host') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT)
+    });
+    let text = '';
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) text += node.textContent + ' ';
+    const match = text.replace(/\s+/g, ' ').match(PLAIN_UNIT_PRICE_RE);
+    return match ? match[1] + ' / ' + match[2].trim() : null;
   }
 
   function absoluteUrl(href) {
@@ -236,6 +249,7 @@
         anchor: swatch.querySelector('.text-swatch-container, .a-button-inner') || swatch,
         title: label + ' - ' + title,
         text: label,
+        context: title,
         price: readPrice(swatch) || parseMoney(swatch.textContent),
         amazonUnitPriceText: null,
         url: absoluteUrl('/dp/' + asin),

@@ -7,6 +7,7 @@ Browser-Erweiterung für den Online-Shop: zeigt an jedem Angebot den Preis pro E
 - **Speicher**: Preis pro TB oder GB (umschaltbar), auch für jede Größe auf der Produktseite
 - **Waschmittel**: Preis pro Waschladung
 - **Tabs, Kapseln, Pods**: Preis pro Stück
+- **Flächenware**: Preis pro m² aus "10m x 0,5m" oder "5 m²" (Folien, Matten, Rollen); Maße in cm (Möbel) bleiben außen vor
 - **Lebensmittel und Flüssiges**: Preis pro Liter oder Kilogramm, bevorzugt der Grundpreis, den der Shop selbst angibt
 - **Karussells und Empfehlungen**: jede Angebotskarte der Seite, etwa Werbeleisten, "Kunden ... haben auch angesehen", "Wird oft zusammen gekauft" oder "Weiter einkaufen"; derselbe Artikel zählt nur einmal
 - **Vergleichsliste**: schwebender Knopf unten rechts, günstigster Einheitspreis zuerst, Klick springt zum Angebot
@@ -37,7 +38,7 @@ Der Rechenkern (`core/`) ist frei von Browser-Schnittstellen und liest die Menge
 | Grundpreis des Shops ("12,60 €/l"), außer er lautet nur "€/Stück" | 2 |
 | Liter, Kilogramm, Stück aus dem Text | 3 |
 
-Berücksichtigt werden Faktoren ("6 x 1,5 l", "12x0,5l", "6 x 12 x 85g", "12x 600ml (338g)"), Packungen ("3er Pack", "28 Stück", "28 Premium Gaskartuschen", "... (28)", "2 Packungen mit 1 kg" ohne Doppelzählung), deutsche und englische Zahlen ("1.000 g", "1,5 l", "1.595 lt.", "256-GB-Karte"). Nennt der Shop nur einen Preis je Stück, ergibt sich daraus die Stückzahl. Gewicht geht vor Volumen ("CO2-Zylinder 425g/60l"). Verworfen werden Raten, Grenzwerte, Passformen und Arbeitsspeicher ("180 TB/Jahr", "7.400 MB/s", "bis zu 24 TB", "für 5- & 11kg-Flaschen", "8GB DDR4"); "256 MB Cache" verliert gegen die Kapazität.
+Berücksichtigt werden Faktoren ("6 x 1,5 l", "12x0,5l", "6 x 12 x 85g", "12x 600ml (338g)"), Packungen ("3er Pack", "28 Stück", "28 Premium Gaskartuschen", "... (28)", "2 Packungen mit 1 kg" ohne Doppelzählung), deutsche und englische Zahlen ("1.000 g", "1,5 l", "1.595 lt.", "256-GB-Karte"). Nennt der Shop nur einen Preis je Stück, ergibt sich daraus die Stückzahl. Gewicht geht vor Volumen ("CO2-Zylinder 425g/60l"). Verworfen werden Raten, Grenzwerte, Passformen, Traglasten, Bauteile und Arbeitsspeicher ("180 TB/Jahr", "7.400 MB/s", "bis zu 24 TB", "für 5- & 11kg-Flaschen", "200 kg belastbar", "15KG Schwungrad", "8GB DDR4"). Speicherplatz zählt nur bei Speicherprodukten, nicht im Gerät ("Kindle 16 GB", "Mini-PC mit 512 GB SSD"). "N Stück" bei Gewicht oder Volumen folgt feinen Regeln je Produktart: bei Kartuschen und Zylindern sind es Packungen, bei Süßwaren der Inhalt, sonst entscheidet der Grundpreis des Shops; "256 MB Cache" verliert gegen die Kapazität.
 
 Bei hoher Unsicherheit bleibt ein Angebot lieber ohne Abzeichen als mit einem falschen:
 

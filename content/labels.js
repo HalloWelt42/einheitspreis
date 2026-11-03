@@ -17,6 +17,7 @@
     GB: 'unitGB',
     load: 'unitLoad',
     portion: 'unitPortion',
+    m2: 'unitSquareMeter',
     l: 'unitLiter',
     kg: 'unitKilogram',
     piece: 'unitPiece'
@@ -26,6 +27,7 @@
     storage: 'dimensionStorage',
     load: 'dimensionLoad',
     portion: 'dimensionPortion',
+    area: 'dimensionArea',
     volume: 'dimensionVolume',
     mass: 'dimensionMass',
     count: 'dimensionCount'
